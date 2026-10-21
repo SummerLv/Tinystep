@@ -29,6 +29,9 @@
     confirmPay: document.getElementById("confirmPay"),
     addItem: document.getElementById("addItem"),
     fillSampleBtn: document.getElementById("fillSampleBtn"),
+    peekParties: document.getElementById("peekParties"),
+    peekTotal: document.getElementById("peekTotal"),
+    fromField: document.getElementById("fromField"),
   };
 
   const SAMPLE_INVOICE = {
@@ -133,7 +136,14 @@
     const currency = els.currency.value;
     const items = readItems();
     const subtotal = items.reduce((s, i) => s + i.amount, 0);
-    els.totalLabel.textContent = `Total ${money(subtotal, currency)}`;
+    const totalText = `Total ${money(subtotal, currency)}`;
+    els.totalLabel.textContent = totalText;
+    if (els.peekTotal) els.peekTotal.textContent = totalText;
+    if (els.peekParties) {
+      const from = els.fromName.value.trim() || "You";
+      const to = els.toName.value.trim() || "Client";
+      els.peekParties.textContent = `${from} → ${to}`;
+    }
 
     const rows = items
       .map(
@@ -250,6 +260,7 @@
       addItemRow(item.description, item.qty, item.rate);
     });
     render();
+    if (els.fromField) els.fromField.classList.add("sample-ready");
 
     const btn = els.fillSampleBtn;
     btn.textContent = "Sample filled";
@@ -276,7 +287,20 @@
   [
     els.fromName, els.fromEmail, els.toName, els.toEmail,
     els.invoiceNo, els.invoiceDate, els.dueDate, els.currency, els.notes,
-  ].forEach((el) => el.addEventListener("input", render));
+  ].forEach((el) => el.addEventListener("input", () => {
+    render();
+    if (el === els.fromName && els.fromField) els.fromField.classList.add("edited");
+  }));
+
+  const formPanel = document.querySelector(".form-panel");
+  formPanel.addEventListener("focusin", (event) => {
+    if (event.target.matches("input, textarea, select")) document.body.classList.add("keyboard-open");
+  });
+  formPanel.addEventListener("focusout", (event) => {
+    const next = event.relatedTarget;
+    if (next && formPanel.contains(next) && next.matches("input, textarea, select")) return;
+    document.body.classList.remove("keyboard-open");
+  });
   [els.fromName, els.fromEmail, els.toName, els.toEmail].forEach((el) => {
     el.addEventListener("input", maybeShowFeedbackNudge);
   });
