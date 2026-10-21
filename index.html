@@ -38,13 +38,21 @@
     <section class="panel form-panel">
       <div class="form-head">
         <h1>Try a free invoice preview in 60 seconds</h1>
-        <button type="button" class="btn sample" id="fillSampleBtn">Fill sample invoice</button>
+        <div class="try-bar" id="tryBar">
+          <button type="button" class="btn sample" id="fillSampleBtn">Fill sample invoice</button>
+          <a class="btn see-preview" href="#livePreview">See preview</a>
+        </div>
       </div>
       <p class="lede">Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.</p>
+      <a class="preview-peek" id="previewPeek" href="#livePreview">
+        <span class="peek-kicker">Live preview · tap to open</span>
+        <span class="peek-parties" id="peekParties">Alex Rivera → Northwind Labs</span>
+        <span class="peek-total" id="peekTotal">Total $1,500.00</span>
+      </a>
       <p class="cta-banner" id="ctaBanner">Fill sample invoice, or edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).</p>
 
       <div class="grid2">
-        <label>From (you)
+        <label class="touch-edit" id="fromField">From (you)
           <input id="fromName" placeholder="Acme Studio" value="Alex Rivera" />
         </label>
         <label>From email
@@ -86,14 +94,14 @@
       </label>
 
       <div class="actions">
-        <button type="button" class="btn primary" id="payBtn">Unlock PDF — $1 test</button>
+        <button type="button" class="btn" id="payBtn">Unlock PDF — $1 test</button>
         <button type="button" class="btn" id="downloadBtn" disabled>Download PDF</button>
         <button type="button" class="btn ghost" id="printBtn">Print preview</button>
       </div>
       <p class="hint" id="payHint">Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.</p>
     </section>
 
-    <section class="panel preview-panel">
+    <section class="panel preview-panel" id="livePreview">
       <div class="preview-toolbar">
         <strong>Live preview</strong>
         <span class="muted" id="totalLabel">Total $0.00</span>

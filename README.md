@@ -6,7 +6,7 @@ Free live invoice preview in the browser — no signup.
 
 <p align="center"><a href="https://summerlv.github.io/Tinystep/">https://summerlv.github.io/Tinystep/</a></p>
 
-**Trying it** means filling the form and watching the live preview update. No signup. **Fill sample invoice** loads a freelance example in one click; edits after that still update the preview.
+**Trying it** means filling the form and watching the live preview update. No signup. **Fill sample invoice** loads a freelance example in one click; edits after that still update the preview. On a phone, that button stays on screen, and a live total stays with the form while you edit.
 
 PDF unlock is optional. The $1 button uses a Stripe **TEST** Payment Link — not a real payment ask.
 
