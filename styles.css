@@ -244,16 +244,20 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
   .actions { order: 10; }
   .hint { order: 11; }
   .form-panel h1 { font-size: 22px; }
-  .top { padding: 10px 12px; align-items: flex-start; }
+  .top { position: relative; padding: 10px 12px; align-items: flex-start; flex-wrap: wrap; }
+  .brand { flex: 1 1 auto; max-width: calc(100% - 86px); min-width: 0; }
   .header-actions {
     width: 100%;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     gap: 6px;
-    padding-bottom: 2px;
   }
-  .header-actions .btn,
-  .header-actions .badge { flex: 0 0 auto; }
+  .header-actions .btn { flex: 0 0 auto; }
+  .badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
   input, select, textarea { font-size: 16px; }
   .preview-peek {
     display: grid;
@@ -324,22 +328,30 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
   }
   .try-bar .btn { flex: 1; min-height: 44px; justify-content: center; }
   .try-bar .sample { flex: 1.4; white-space: normal; line-height: 1.15; text-align: center; }
-  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  /* Extra room so the invoice can scroll clear of the sticky total chip and the pinned bar. */
+  body { padding-bottom: calc(180px + env(safe-area-inset-bottom)); }
   body.keyboard-open .try-bar {
     transform: translateY(120%);
     pointer-events: none;
   }
   .preview-panel { scroll-margin-top: 8px; }
-  .invoice { padding: 14px; min-height: 0; }
+  .invoice { padding: 14px 10px; min-height: 0; }
   .inv-top { flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
   .inv-title { font-size: 22px; }
   .inv-meta { text-align: left; }
   .parties { gap: 10px; margin-bottom: 16px; }
   .parties strong, .parties div { overflow-wrap: anywhere; }
-  table.items { table-layout: fixed; font-size: 12px; }
+  table.items { table-layout: fixed; font-size: 11px; }
   table.items th:nth-child(1),
-  table.items td:nth-child(1) { width: 40%; }
-  table.items th, table.items td { padding: 6px 3px; overflow-wrap: break-word; }
+  table.items td:nth-child(1) { width: 36%; }
+  table.items th:nth-child(2),
+  table.items td:nth-child(2) { width: 12%; }
+  table.items th:nth-child(3),
+  table.items td:nth-child(3) { width: 26%; }
+  table.items th:nth-child(4),
+  table.items td:nth-child(4) { width: 26%; }
+  table.items th, table.items td { padding: 6px 2px; overflow-wrap: break-word; }
+  table.items td.num, table.items th.num { white-space: nowrap; }
   .watermark { font-size: 18px; letter-spacing: .06em; inset: 48px 8px 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
