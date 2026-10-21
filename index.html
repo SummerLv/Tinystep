@@ -27,6 +27,7 @@
       </div>
     </div>
     <div class="header-actions">
+      <a class="btn feedback-cta" id="feedbackCta" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave feedback</a>
       <button type="button" class="btn copy-link" id="copyLinkBtn">Copy link</button>
       <div class="badge" id="unlockBadge">Locked</div>
     </div>
@@ -35,8 +36,8 @@
   <main class="layout">
     <section class="panel form-panel">
       <h1>Try a free invoice preview in 60 seconds</h1>
-      <p class="lede">Fill the form → <strong>live preview is free</strong> (no signup). Optional one-time <strong>$1</strong> unlocks a watermark-free PDF. We're looking for real users to try it and tell us what feels broken.</p>
-      <p class="cta-banner" id="ctaBanner">👇 Edit the sample — free preview counts as trying it. PDF unlock is optional.</p>
+      <p class="lede">Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.</p>
+      <p class="cta-banner" id="ctaBanner">Edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).</p>
 
       <div class="grid2">
         <label>From (you)
@@ -81,11 +82,11 @@
       </label>
 
       <div class="actions">
-        <button type="button" class="btn primary" id="payBtn">Unlock PDF — $1</button>
+        <button type="button" class="btn primary" id="payBtn">Unlock PDF — $1 test</button>
         <button type="button" class="btn" id="downloadBtn" disabled>Download PDF</button>
         <button type="button" class="btn ghost" id="printBtn">Print preview</button>
       </div>
-      <p class="hint" id="payHint">Preview free forever. PDF unlock is optional ($1 one-time). Feedback &gt; payment right now.</p>
+      <p class="hint" id="payHint">Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.</p>
     </section>
 
     <section class="panel preview-panel">
@@ -101,20 +102,31 @@
   </main>
 
   <footer class="foot">
-    <span>TinyInvoice · free preview · optional $1 PDF · no account</span>
+    <span>TinyInvoice · free preview · optional $1 test PDF · no account</span>
     <a href="#privacy" id="privacyLink">Privacy</a>
   </footer>
 
   <dialog id="payModal">
     <form method="dialog" class="modal">
-      <h3>Unlock PDF for $1</h3>
-      <p>One-time <strong>$1</strong>. Secure checkout. After payment, return here — PDF download unlocks on this browser (no account).</p>
+      <h3>Optional PDF unlock ($1 test)</h3>
+      <p>This opens a <strong>Stripe TEST</strong> checkout. It is not a live charge and does not require an account. The free preview stays available either way.</p>
       <div class="modal-actions">
         <button class="btn ghost" value="cancel">Cancel</button>
-        <button class="btn primary" id="confirmPay" value="default">Continue to pay</button>
+        <button class="btn primary" id="confirmPay" value="default">Continue to test checkout</button>
       </div>
     </form>
   </dialog>
+
+  <div id="feedbackNudge" class="feedback-nudge" hidden role="status" aria-live="polite">
+    <p class="feedback-nudge-copy">
+      <strong>Preview updated.</strong>
+      A one-line comment on Issue #2 helps — what felt off? No signup.
+    </p>
+    <div class="feedback-nudge-actions">
+      <a class="btn primary" id="nudgeFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Comment on Issue #2</a>
+      <button type="button" class="btn ghost" id="dismissNudge">Not now</button>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="config.js"></script>
