@@ -20,6 +20,7 @@
     payBtn: document.getElementById("payBtn"),
     downloadBtn: document.getElementById("downloadBtn"),
     printBtn: document.getElementById("printBtn"),
+    copyLinkBtn: document.getElementById("copyLinkBtn"),
     payHint: document.getElementById("payHint"),
     payModal: document.getElementById("payModal"),
     confirmPay: document.getElementById("confirmPay"),
@@ -207,6 +208,42 @@
     els.invoiceNo, els.invoiceDate, els.dueDate, els.currency, els.notes,
   ].forEach((el) => el.addEventListener("input", render));
 
+  const SHARE_URL = "https://summerlv.github.io/Tinystep/";
+  let copyResetTimer = 0;
+
+  async function copyShareLink() {
+    const btn = els.copyLinkBtn;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(SHARE_URL);
+      } else {
+        const field = document.createElement("textarea");
+        field.value = SHARE_URL;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.left = "-9999px";
+        document.body.appendChild(field);
+        field.select();
+        const ok = document.execCommand("copy");
+        field.remove();
+        if (!ok) throw new Error("copy failed");
+      }
+      btn.textContent = "Copied!";
+      btn.classList.add("copied");
+    } catch {
+      btn.textContent = "Copy failed";
+      btn.classList.remove("copied");
+    }
+    clearTimeout(copyResetTimer);
+    copyResetTimer = setTimeout(() => {
+      btn.textContent = "Copy link";
+      btn.classList.remove("copied");
+    }, 1600);
+  }
+
+  els.copyLinkBtn.addEventListener("click", () => {
+    copyShareLink();
+  });
   els.printBtn.addEventListener("click", () => window.print());
   els.downloadBtn.addEventListener("click", () => downloadPdf().catch(console.error));
 
