@@ -48,7 +48,8 @@ body {
   border: 1px solid var(--line); color: var(--warn); background: #2a2212;
 }
 .badge.unlocked { color: var(--accent2); background: #123022; border-color: #23563d; }
-.btn.copy-link {
+.btn.copy-link,
+.btn.share-x {
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 700;
@@ -56,6 +57,7 @@ body {
   border-radius: 999px;
   line-height: 1.2;
 }
+.btn.share-x:hover { filter: brightness(1.08); }
 .btn.copy-link.copied {
   color: var(--accent2);
   background: #123022;
