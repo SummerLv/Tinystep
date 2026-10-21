@@ -22,6 +22,7 @@
     printBtn: document.getElementById("printBtn"),
     copyLinkBtn: document.getElementById("copyLinkBtn"),
     feedbackNudge: document.getElementById("feedbackNudge"),
+    nudgeFeedbackLink: document.getElementById("nudgeFeedbackLink"),
     dismissNudge: document.getElementById("dismissNudge"),
     payHint: document.getElementById("payHint"),
     payModal: document.getElementById("payModal"),
@@ -219,7 +220,6 @@
   });
 
   const SHARE_URL = "https://summerlv.github.io/Tinystep/";
-  const ISSUE_URL = "https://github.com/SummerLv/Tinystep/issues/2";
   const NUDGE_KEY = "tinyinvoice_feedback_nudge_v1";
   let meaningfulBaseline = "";
   let nudgeTimer = 0;
@@ -279,12 +279,10 @@
     hideFeedbackNudge();
   }
 
-  document.querySelectorAll('a[href="' + ISSUE_URL + '"]').forEach((link) => {
-    link.addEventListener("click", () => {
-      clearTimeout(nudgeTimer);
-      writeNudgeFlag("opened");
-      hideFeedbackNudge();
-    });
+  els.nudgeFeedbackLink.addEventListener("click", () => {
+    clearTimeout(nudgeTimer);
+    writeNudgeFlag("opened");
+    hideFeedbackNudge();
   });
   els.dismissNudge.addEventListener("click", dismissFeedbackNudge);
   let copyResetTimer = 0;

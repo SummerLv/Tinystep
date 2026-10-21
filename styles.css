@@ -31,15 +31,7 @@ body {
   padding: 16px 22px;
   border-bottom: 1px solid var(--line);
 }
-.top {
-  flex-wrap: wrap;
-  gap: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-}
+.top { flex-wrap: wrap; gap: 10px; }
 .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .foot { border-bottom: 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .brand { display: flex; gap: 12px; align-items: center; }
