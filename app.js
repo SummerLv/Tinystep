@@ -34,6 +34,219 @@
     fromField: document.getElementById("fromField"),
   };
 
+  const LANG_KEY = "tinyinvoice_lang_v1";
+  const I18N = {
+    en: {
+      pageTitle: "TinyInvoice — Free invoice preview (feedback welcome)",
+      tag: "Free preview · feedback welcome",
+      langGroup: "Language",
+      feedbackCta: "Leave feedback",
+      shareOnX: "Share on X",
+      shareText: "TinyInvoice: free live invoice preview in the browser — no signup. Looking for feedback: https://summerlv.github.io/Tinystep/",
+      copyLink: "Copy link",
+      copied: "Copied!",
+      copyFailed: "Copy failed",
+      locked: "Locked",
+      unlocked: "Unlocked",
+      h1: "Try a free invoice preview in 60 seconds",
+      fillSample: "Fill sample invoice",
+      sampleFilled: "Sample filled",
+      seePreview: "See preview",
+      lede: "Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.",
+      peekKicker: "Live preview · tap to open",
+      ctaBanner: 'Fill sample invoice, or edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).',
+      fromYou: "From (you)",
+      fromEmail: "From email",
+      billTo: "Bill to",
+      clientEmail: "Client email",
+      invoiceNo: "Invoice #",
+      date: "Date",
+      currency: "Currency",
+      dueDate: "Due date",
+      lineItems: "Line items",
+      description: "Description",
+      qty: "Qty",
+      rate: "Rate",
+      remove: "Remove",
+      addLine: "+ Add line",
+      notes: "Notes",
+      phFromName: "Acme Studio",
+      phFromEmail: "alex@example.com",
+      phToName: "Client Co.",
+      phToEmail: "ap@client.com",
+      phNotes: "Payment terms, bank details…",
+      payBtn: "Unlock PDF — $1 test",
+      downloadBtn: "Download PDF",
+      printBtn: "Print preview",
+      hintFree: "Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.",
+      hintUnlocked: "Unlocked on this browser. You can download a watermark-free PDF. Feedback is still welcome.",
+      hintDemoOn: "Demo unlock active (no live payment configured).",
+      hintDemoOff: "No live Payment Link yet — set window.TINYINVOICE_CONFIG.paymentLink, or use ?demo=1 for local smoke test.",
+      livePreview: "Live preview",
+      you: "You",
+      client: "Client",
+      from: "From",
+      invoiceWord: "INVOICE",
+      generated: "Generated with TinyInvoice",
+      due: "Due",
+      subtotal: "Subtotal",
+      total: "Total",
+      amount: "Amount",
+      itemFallback: "Item",
+      watermark: "PREVIEW · TinyInvoice",
+      footer: "TinyInvoice · free preview · optional $1 test PDF · no account",
+      privacy: "Privacy",
+      modalTitle: "Optional PDF unlock ($1 test)",
+      modalBody: "This opens a <strong>Stripe TEST</strong> checkout. It is not a live charge and does not require an account. The free preview stays available either way.",
+      cancel: "Cancel",
+      continuePay: "Continue to test checkout",
+      nudgeTitle: "Preview updated.",
+      nudgeBody: "A one-line comment on Issue #2 helps — what felt off? No signup.",
+      nudgeCta: "Comment on Issue #2",
+      notNow: "Not now",
+      demoConfirm: "No live Payment Link configured.\n\nUnlock in DEMO mode for local testing? (does not collect $1)",
+      payMissing: "Payment is not configured yet.",
+    },
+    zh: {
+      pageTitle: "TinyInvoice — 免费发票预览（欢迎反馈）",
+      tag: "免费预览 · 欢迎反馈",
+      langGroup: "语言",
+      feedbackCta: "留下反馈",
+      shareOnX: "分享到 X",
+      shareText: "TinyInvoice：浏览器里免费实时发票预览，无需注册。欢迎反馈：https://summerlv.github.io/Tinystep/",
+      copyLink: "复制链接",
+      copied: "已复制",
+      copyFailed: "复制失败",
+      locked: "未解锁",
+      unlocked: "已解锁",
+      h1: "60 秒免费试用发票预览",
+      fillSample: "填入示例发票",
+      sampleFilled: "已填入示例",
+      seePreview: "查看预览",
+      lede: "填写表单 → <strong>实时预览免费</strong>（无需注册）。可选的 $1 PDF 解锁使用 <strong>Stripe 测试</strong>结账，不会真实扣款。欢迎反馈——告诉我们哪里不顺手。",
+      peekKicker: "实时预览 · 点按打开",
+      ctaBanner: '填入示例发票，或修改开票方、账单接收方或一行明细——实时预览免费。<a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">在 Issue #2 留一句评论</a>。PDF 解锁可选（Stripe 测试）。',
+      fromYou: "开票方（你）",
+      fromEmail: "开票方邮箱",
+      billTo: "账单接收方",
+      clientEmail: "客户邮箱",
+      invoiceNo: "发票编号",
+      date: "日期",
+      currency: "币种",
+      dueDate: "到期日",
+      lineItems: "明细",
+      description: "描述",
+      qty: "数量",
+      rate: "单价",
+      remove: "删除",
+      addLine: "+ 添加一行",
+      notes: "备注",
+      phFromName: "你的工作室",
+      phFromEmail: "you@example.com",
+      phToName: "客户公司",
+      phToEmail: "client@example.com",
+      phNotes: "付款条款、银行信息…",
+      payBtn: "解锁 PDF — $1 测试",
+      downloadBtn: "下载 PDF",
+      printBtn: "打印预览",
+      hintFree: "预览始终免费。$1 按钮打开的是 Stripe 测试结账，不会真实扣款。欢迎反馈。",
+      hintUnlocked: "已在此浏览器解锁。可以下载无水印 PDF。仍然欢迎反馈。",
+      hintDemoOn: "演示解锁已开启（未配置真实支付）。",
+      hintDemoOff: "尚未配置 Payment Link — 请设置 window.TINYINVOICE_CONFIG.paymentLink，或使用 ?demo=1 做本地测试。",
+      livePreview: "实时预览",
+      you: "你",
+      client: "客户",
+      from: "开票方",
+      invoiceWord: "发票",
+      generated: "由 TinyInvoice 生成",
+      due: "到期",
+      subtotal: "小计",
+      total: "合计",
+      amount: "金额",
+      itemFallback: "项目",
+      watermark: "预览 · TinyInvoice",
+      footer: "TinyInvoice · 免费预览 · 可选 $1 测试 PDF · 无需账户",
+      privacy: "隐私",
+      modalTitle: "可选 PDF 解锁（$1 测试）",
+      modalBody: "这将打开 <strong>Stripe 测试</strong>结账。不是真实扣款，也不需要账户。免费预览始终可用。",
+      cancel: "取消",
+      continuePay: "继续测试结账",
+      nudgeTitle: "预览已更新。",
+      nudgeBody: "在 Issue #2 留一句评论很有帮助——哪里不顺手？无需注册。",
+      nudgeCta: "在 Issue #2 评论",
+      notNow: "暂时不用",
+      demoConfirm: "尚未配置 Payment Link。\n\n是否以演示模式解锁以便本地测试？（不会收取 $1）",
+      payMissing: "支付尚未配置。",
+    },
+  };
+
+  function detectLang() {
+    try {
+      const saved = localStorage.getItem(LANG_KEY);
+      if (saved === "en" || saved === "zh") return saved;
+    } catch (_) {}
+    const nav = (navigator.language || "").toLowerCase();
+    return nav.startsWith("zh") ? "zh" : "en";
+  }
+
+  let lang = detectLang();
+
+  function t(key) {
+    const pack = I18N[lang] || I18N.en;
+    return pack[key] || I18N.en[key] || key;
+  }
+
+  function shareHref() {
+    return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(t("shareText"));
+  }
+
+  function applyTransientLabels() {
+    const copyBtn = els.copyLinkBtn;
+    if (copyBtn.classList.contains("copied")) copyBtn.textContent = t("copied");
+    else if (copyBtn.dataset.failed === "1") copyBtn.textContent = t("copyFailed");
+    else copyBtn.textContent = t("copyLink");
+    if (els.fillSampleBtn) {
+      els.fillSampleBtn.textContent = els.fillSampleBtn.classList.contains("filled")
+        ? t("sampleFilled")
+        : t("fillSample");
+    }
+  }
+
+  function applyChrome() {
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+      el.innerHTML = t(el.getAttribute("data-i18n-html"));
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      el.placeholder = t(el.getAttribute("data-i18n-placeholder"));
+    });
+    document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+      el.title = t(el.getAttribute("data-i18n-title"));
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+      el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
+    });
+    const share = document.getElementById("shareOnX");
+    if (share) share.href = shareHref();
+    document.querySelectorAll("[data-set-lang]").forEach((btn) => {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-set-lang") === lang ? "true" : "false");
+    });
+    applyTransientLabels();
+    refreshUnlockUI();
+    render();
+  }
+
+  function setLang(next) {
+    if (next !== "en" && next !== "zh") return;
+    if (next === lang) return;
+    lang = next;
+    try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
+    applyChrome();
+  }
+
   const SAMPLE_INVOICE = {
     fromName: "Maya Chen",
     fromEmail: "hello@mayachen.studio",
@@ -85,19 +298,15 @@
 
   function refreshUnlockUI() {
     const on = isUnlocked();
-    els.unlockBadge.textContent = on ? "Unlocked" : "Locked";
+    els.unlockBadge.textContent = on ? t("unlocked") : t("locked");
     els.unlockBadge.classList.toggle("unlocked", on);
     els.watermark.classList.toggle("hidden", on);
     els.downloadBtn.disabled = !on;
     if (cfg.paymentLink) {
-      els.payHint.textContent = on
-        ? "Unlocked on this browser. You can download a watermark-free PDF. Feedback is still welcome."
-        : "Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.";
+      els.payHint.textContent = on ? t("hintUnlocked") : t("hintFree");
       els.payBtn.disabled = on;
     } else {
-      els.payHint.textContent = on
-        ? "Demo unlock active (no live payment configured)."
-        : "No live Payment Link yet — set window.TINYINVOICE_CONFIG.paymentLink, or use ?demo=1 for local smoke test.";
+      els.payHint.textContent = on ? t("hintDemoOn") : t("hintDemoOff");
       els.payBtn.disabled = on;
     }
   }
@@ -106,10 +315,10 @@
     const row = document.createElement("div");
     row.className = "item-row";
     row.innerHTML = `
-      <label>Description<input class="desc" value="${desc.replace(/"/g, "&quot;")}" /></label>
-      <label>Qty<input class="qty" type="number" min="0" step="0.01" value="${qty}" /></label>
-      <label>Rate<input class="rate" type="number" min="0" step="0.01" value="${rate}" /></label>
-      <button type="button" class="btn ghost danger remove" title="Remove">✕</button>
+      <label><span data-i18n="description">${t("description")}</span><input class="desc" value="${desc.replace(/"/g, "&quot;")}" /></label>
+      <label><span data-i18n="qty">${t("qty")}</span><input class="qty" type="number" min="0" step="0.01" value="${qty}" /></label>
+      <label><span data-i18n="rate">${t("rate")}</span><input class="rate" type="number" min="0" step="0.01" value="${rate}" /></label>
+      <button type="button" class="btn ghost danger remove" data-i18n-title="remove" title="${t("remove")}">✕</button>
     `;
     row.querySelector(".remove").addEventListener("click", () => {
       row.remove();
@@ -125,7 +334,7 @@
 
   function readItems() {
     return [...els.items.querySelectorAll(".item-row")].map((row) => {
-      const description = row.querySelector(".desc").value.trim() || "Item";
+      const description = row.querySelector(".desc").value.trim() || t("itemFallback");
       const qty = parseFloat(row.querySelector(".qty").value) || 0;
       const rate = parseFloat(row.querySelector(".rate").value) || 0;
       return { description, qty, rate, amount: qty * rate };
@@ -136,12 +345,12 @@
     const currency = els.currency.value;
     const items = readItems();
     const subtotal = items.reduce((s, i) => s + i.amount, 0);
-    const totalText = `Total ${money(subtotal, currency)}`;
+    const totalText = `${t("total")} ${money(subtotal, currency)}`;
     els.totalLabel.textContent = totalText;
     if (els.peekTotal) els.peekTotal.textContent = totalText;
     if (els.peekParties) {
-      const from = els.fromName.value.trim() || "You";
-      const to = els.toName.value.trim() || "Client";
+      const from = els.fromName.value.trim() || t("you");
+      const to = els.toName.value.trim() || t("client");
       els.peekParties.textContent = `${from} → ${to}`;
     }
 
@@ -159,23 +368,23 @@
     els.invoice.innerHTML = `
       <div class="inv-top">
         <div>
-          <div class="inv-title">INVOICE</div>
-          <div style="margin-top:8px;font-size:13px;color:#516074">Generated with TinyInvoice</div>
+          <div class="inv-title">${escapeHtml(t("invoiceWord"))}</div>
+          <div style="margin-top:8px;font-size:13px;color:#516074">${escapeHtml(t("generated"))}</div>
         </div>
         <div class="inv-meta">
           <div><strong>#</strong> ${escapeHtml(els.invoiceNo.value)}</div>
-          <div><strong>Date</strong> ${escapeHtml(els.invoiceDate.value)}</div>
-          <div><strong>Due</strong> ${escapeHtml(els.dueDate.value)}</div>
+          <div><strong>${escapeHtml(t("date"))}</strong> ${escapeHtml(els.invoiceDate.value)}</div>
+          <div><strong>${escapeHtml(t("due"))}</strong> ${escapeHtml(els.dueDate.value)}</div>
         </div>
       </div>
       <div class="parties">
         <div>
-          <h4>From</h4>
+          <h4>${escapeHtml(t("from"))}</h4>
           <strong>${escapeHtml(els.fromName.value)}</strong>
           <div>${escapeHtml(els.fromEmail.value)}</div>
         </div>
         <div>
-          <h4>Bill to</h4>
+          <h4>${escapeHtml(t("billTo"))}</h4>
           <strong>${escapeHtml(els.toName.value)}</strong>
           <div>${escapeHtml(els.toEmail.value)}</div>
         </div>
@@ -183,18 +392,18 @@
       <table class="items">
         <thead>
           <tr>
-            <th>Description</th>
-            <th class="num">Qty</th>
-            <th class="num">Rate</th>
-            <th class="num">Amount</th>
+            <th>${escapeHtml(t("description"))}</th>
+            <th class="num">${escapeHtml(t("qty"))}</th>
+            <th class="num">${escapeHtml(t("rate"))}</th>
+            <th class="num">${escapeHtml(t("amount"))}</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
       <div class="totals">
         <table>
-          <tr><td>Subtotal</td><td style="text-align:right">${money(subtotal, currency)}</td></tr>
-          <tr><td class="grand">Total</td><td class="grand" style="text-align:right">${money(subtotal, currency)}</td></tr>
+          <tr><td>${escapeHtml(t("subtotal"))}</td><td style="text-align:right">${money(subtotal, currency)}</td></tr>
+          <tr><td class="grand">${escapeHtml(t("total"))}</td><td class="grand" style="text-align:right">${money(subtotal, currency)}</td></tr>
         </table>
       </div>
       <div class="inv-notes">${escapeHtml(els.notes.value)}</div>
@@ -263,13 +472,13 @@
     if (els.fromField) els.fromField.classList.add("sample-ready");
 
     const btn = els.fillSampleBtn;
-    btn.textContent = "Sample filled";
+    btn.textContent = t("sampleFilled");
     btn.classList.add("filled");
     els.invoice.classList.add("just-filled");
     clearTimeout(sampleResetTimer);
     clearTimeout(sampleFlashTimer);
     sampleResetTimer = setTimeout(() => {
-      btn.textContent = "Fill sample invoice";
+      btn.textContent = t("fillSample");
       btn.classList.remove("filled");
     }, 1600);
     sampleFlashTimer = setTimeout(() => {
@@ -297,6 +506,9 @@
   });
 
   els.fillSampleBtn.addEventListener("click", fillSampleInvoice);
+  document.querySelectorAll("[data-set-lang]").forEach((btn) => {
+    btn.addEventListener("click", () => setLang(btn.getAttribute("data-set-lang")));
+  });
   [
     els.fromName, els.fromEmail, els.toName, els.toEmail,
     els.invoiceNo, els.invoiceDate, els.dueDate, els.currency, els.notes,
@@ -403,15 +615,18 @@
         field.remove();
         if (!ok) throw new Error("copy failed");
       }
-      btn.textContent = "Copied!";
+      delete btn.dataset.failed;
+      btn.textContent = t("copied");
       btn.classList.add("copied");
     } catch {
-      btn.textContent = "Copy failed";
+      btn.dataset.failed = "1";
+      btn.textContent = t("copyFailed");
       btn.classList.remove("copied");
     }
     clearTimeout(copyResetTimer);
     copyResetTimer = setTimeout(() => {
-      btn.textContent = "Copy link";
+      delete btn.dataset.failed;
+      btn.textContent = t("copyLink");
       btn.classList.remove("copied");
     }, 1600);
   }
@@ -440,11 +655,11 @@
       els.payModal.showModal();
     } else if (cfg.allowDemoUnlock) {
       // Smoke-test path while payment account missing
-      if (confirm("No live Payment Link configured.\n\nUnlock in DEMO mode for local testing? (does not collect $1)")) {
+      if (confirm(t("demoConfirm"))) {
         setUnlocked(true);
       }
     } else {
-      alert("Payment is not configured yet.");
+      alert(t("payMissing"));
     }
   });
 
@@ -466,6 +681,5 @@
   addItemRow("Landing page implementation", 8, 75);
   meaningfulBaseline = meaningfulSignature();
   handleReturnParams();
-  refreshUnlockUI();
-  render();
+  applyChrome();
 })();

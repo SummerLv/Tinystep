@@ -12,7 +12,7 @@
   --paper-ink: #142033;
   --radius: 14px;
   --shadow: 0 18px 50px rgba(0,0,0,.35);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
 }
 * { box-sizing: border-box; }
 body {
@@ -33,6 +33,33 @@ body {
 }
 .top { flex-wrap: wrap; gap: 10px; }
 .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #121820;
+  line-height: 1;
+}
+.lang-toggle button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  padding: 5px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.lang-toggle button[aria-pressed="true"] { color: var(--ink); background: #2a3442; }
+.lang-toggle .lang-sep { color: #5c6b7e; font-size: 12px; font-weight: 700; user-select: none; }
 .foot { border-bottom: 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .brand { display: flex; gap: 12px; align-items: center; }
 .logo {
@@ -310,8 +337,12 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
     font-weight: 700;
   }
   .touch-edit.sample-ready::after { content: "Now change this name — the preview follows"; }
+  html[lang^="zh"] .touch-edit::after { content: "点一下名字——上方合计会跟着变"; }
+  html[lang^="zh"] .touch-edit.sample-ready::after { content: "现在改这个名字——预览会跟着变"; }
   .touch-edit.edited input { box-shadow: none; }
-  .touch-edit.edited::after { content: none; }
+  .touch-edit.edited::after,
+  html[lang^="zh"] .touch-edit.edited::after { content: none; }
+  html[lang^="zh"] .peek-kicker { letter-spacing: 0; text-transform: none; }
   a.btn.see-preview { display: inline-flex; }
   .try-bar {
     position: fixed;
