@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TinyInvoice — Clean invoices in 60 seconds</title>
+  <meta name="description" content="Create a clean professional invoice. Preview free. Unlock PDF download for $1." />
+  <link rel="stylesheet" href="styles.css" />
+  <meta property="og:title" content="TinyInvoice — $1 clean PDF invoice" />
+  <meta property="og:description" content="Free live invoice preview. Unlock watermark-free PDF for $1." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="description" content="Create a clean invoice with live preview. Unlock PDF download for $1." />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo">TI</span>
+      <div>
+        <strong>TinyInvoice</strong>
+        <div class="tag">Preview free · PDF $1</div>
+      </div>
+    </div>
+    <div class="badge" id="unlockBadge">Locked</div>
+  </header>
+
+  <main class="layout">
+    <section class="panel form-panel">
+      <h1>Make a clean invoice in 60 seconds</h1>
+      <p class="lede">Fill the form → live preview updates instantly. <strong>Preview is free.</strong> Pay <strong>$1 once</strong> to unlock a watermark-free PDF. No account. No subscription.</p>
+      <p class="cta-banner" id="ctaBanner">👇 Edit the sample → unlock PDF for $1 when you need to send it.</p>
+
+      <div class="grid2">
+        <label>From (you)
+          <input id="fromName" placeholder="Acme Studio" value="Alex Rivera" />
+        </label>
+        <label>From email
+          <input id="fromEmail" type="email" placeholder="alex@example.com" value="alex@example.com" />
+        </label>
+        <label>Bill to
+          <input id="toName" placeholder="Client Co." value="Northwind Labs" />
+        </label>
+        <label>Client email
+          <input id="toEmail" type="email" placeholder="ap@client.com" value="ap@northwind.example" />
+        </label>
+        <label>Invoice #
+          <input id="invoiceNo" value="INV-1001" />
+        </label>
+        <label>Date
+          <input id="invoiceDate" type="date" />
+        </label>
+        <label>Currency
+          <select id="currency">
+            <option value="USD" selected>USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="SGD">SGD</option>
+          </select>
+        </label>
+        <label>Due date
+          <input id="dueDate" type="date" />
+        </label>
+      </div>
+
+      <h2>Line items</h2>
+      <div id="items"></div>
+      <button type="button" class="btn ghost" id="addItem">+ Add line</button>
+
+      <label class="notes">Notes
+        <textarea id="notes" rows="3" placeholder="Payment terms, bank details…">Thanks for your business. Payment due within 14 days.</textarea>
+      </label>
+
+      <div class="actions">
+        <button type="button" class="btn primary" id="payBtn">Unlock PDF — $1</button>
+        <button type="button" class="btn" id="downloadBtn" disabled>Download PDF</button>
+        <button type="button" class="btn ghost" id="printBtn">Print preview</button>
+      </div>
+      <p class="hint" id="payHint">Preview free forever. PDF unlock is a one-time $1 — no subscription.</p>
+    </section>
+
+    <section class="panel preview-panel">
+      <div class="preview-toolbar">
+        <strong>Live preview</strong>
+        <span class="muted" id="totalLabel">Total $0.00</span>
+      </div>
+      <div id="invoice" class="invoice">
+        <!-- rendered by app.js -->
+      </div>
+      <div class="watermark" id="watermark">PREVIEW · TinyInvoice</div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>TinyInvoice · one-time $1 unlock · no account required</span>
+    <a href="#privacy" id="privacyLink">Privacy</a>
+  </footer>
+
+  <dialog id="payModal">
+    <form method="dialog" class="modal">
+      <h3>Unlock PDF for $1</h3>
+      <p>One-time <strong>$1</strong>. Secure checkout. After payment, return here — PDF download unlocks on this browser (no account).</p>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel">Cancel</button>
+        <button class="btn primary" id="confirmPay" value="default">Continue to pay</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
