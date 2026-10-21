@@ -28,6 +28,26 @@
     payModal: document.getElementById("payModal"),
     confirmPay: document.getElementById("confirmPay"),
     addItem: document.getElementById("addItem"),
+    fillSampleBtn: document.getElementById("fillSampleBtn"),
+  };
+
+  const SAMPLE_INVOICE = {
+    fromName: "Maya Chen",
+    fromEmail: "hello@mayachen.studio",
+    toName: "Northline Goods",
+    toEmail: "accounts@northlinegoods.example",
+    invoiceNo: "INV-2048",
+    currency: "USD",
+    notes:
+      "Payment due within 14 days of the invoice date.\n" +
+      "ACH or wire. Please include INV-2048 on the transfer.\n" +
+      "Covers brand identity, marketing site design, and frontend implementation for the spring launch.\n" +
+      "Thank you — Maya Chen Studio.",
+    items: [
+      { description: "Brand workshop and discovery", qty: 1, rate: 1200 },
+      { description: "Visual identity system", qty: 1, rate: 2800 },
+      { description: "Marketing site design and build", qty: 36, rate: 110 },
+    ],
   };
 
   function todayISO() {
@@ -211,6 +231,48 @@
     render();
     maybeShowFeedbackNudge();
   });
+
+  let sampleResetTimer = 0;
+  let sampleFlashTimer = 0;
+
+  function fillSampleInvoice() {
+    els.fromName.value = SAMPLE_INVOICE.fromName;
+    els.fromEmail.value = SAMPLE_INVOICE.fromEmail;
+    els.toName.value = SAMPLE_INVOICE.toName;
+    els.toEmail.value = SAMPLE_INVOICE.toEmail;
+    els.invoiceNo.value = SAMPLE_INVOICE.invoiceNo;
+    els.currency.value = SAMPLE_INVOICE.currency;
+    els.invoiceDate.value = todayISO();
+    els.dueDate.value = plusDays(14);
+    els.notes.value = SAMPLE_INVOICE.notes;
+    els.items.replaceChildren();
+    SAMPLE_INVOICE.items.forEach((item) => {
+      addItemRow(item.description, item.qty, item.rate);
+    });
+    render();
+
+    const btn = els.fillSampleBtn;
+    btn.textContent = "Sample filled";
+    btn.classList.add("filled");
+    els.invoice.classList.add("just-filled");
+    clearTimeout(sampleResetTimer);
+    clearTimeout(sampleFlashTimer);
+    sampleResetTimer = setTimeout(() => {
+      btn.textContent = "Fill sample invoice";
+      btn.classList.remove("filled");
+    }, 1600);
+    sampleFlashTimer = setTimeout(() => {
+      els.invoice.classList.remove("just-filled");
+    }, 1200);
+
+    const preview = document.querySelector(".preview-panel");
+    if (preview && window.matchMedia("(max-width: 960px)").matches) {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      preview.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    }
+  }
+
+  els.fillSampleBtn.addEventListener("click", fillSampleInvoice);
   [
     els.fromName, els.fromEmail, els.toName, els.toEmail,
     els.invoiceNo, els.invoiceDate, els.dueDate, els.currency, els.notes,
