@@ -250,7 +250,6 @@
       addItemRow(item.description, item.qty, item.rate);
     });
     render();
-    maybeShowFeedbackNudge();
 
     const btn = els.fillSampleBtn;
     btn.textContent = "Sample filled";
