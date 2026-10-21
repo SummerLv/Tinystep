@@ -155,6 +155,19 @@ a.btn.see-preview { display: none; }
   border-color: transparent;
   box-shadow: none;
 }
+.btn.demo {
+  border-color: color-mix(in srgb, var(--accent2) 65%, var(--line));
+  background: #10241c;
+  color: var(--ink);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.btn.demo:hover { filter: brightness(1.08); }
+.btn.demo.opened {
+  color: #062015;
+  background: var(--accent2);
+  border-color: transparent;
+}
 .preview-peek { display: none; }
 .lede { color: var(--muted); margin: 0 0 18px; line-height: 1.5; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -357,8 +370,10 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
     border-top: 1px solid var(--line);
     box-shadow: 0 -12px 32px rgba(0,0,0,.45);
   }
-  .try-bar .btn { flex: 1; min-height: 44px; justify-content: center; }
-  .try-bar .sample { flex: 1.4; white-space: normal; line-height: 1.15; text-align: center; }
+  .try-bar { flex-wrap: wrap; }
+  .try-bar .btn { flex: 1; min-height: 44px; justify-content: center; font-size: 13px; padding: 8px 6px; }
+  .try-bar .sample { flex: 1.25; white-space: normal; line-height: 1.15; text-align: center; }
+  .try-bar .demo { flex: 1.15; white-space: normal; line-height: 1.15; text-align: center; }
   /* Extra room so the invoice can scroll clear of the sticky total chip and the pinned bar. */
   body { padding-bottom: calc(180px + env(safe-area-inset-bottom)); }
   body.keyboard-open .try-bar {
