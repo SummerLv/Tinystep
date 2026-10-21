@@ -32,7 +32,7 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .top { flex-wrap: wrap; gap: 10px; }
-.header-actions { display: flex; align-items: center; gap: 10px; }
+.header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .foot { border-bottom: 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .brand { display: flex; gap: 12px; align-items: center; }
 .logo {
@@ -61,6 +61,24 @@ body {
   background: #123022;
   border-color: #23563d;
 }
+a.btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn.feedback-cta {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  border-radius: 999px;
+  line-height: 1.2;
+  color: #062015;
+  background: var(--accent2);
+  border-color: transparent;
+}
+.btn.feedback-cta:hover { filter: brightness(1.08); }
 .layout {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
@@ -178,7 +196,7 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
 }
 @media print {
   body { background: white; }
-  .top, .foot, .form-panel, .preview-toolbar, .watermark { display: none !important; }
+  .top, .foot, .form-panel, .preview-toolbar, .watermark, .feedback-nudge { display: none !important; }
   .layout { display: block; padding: 0; }
   .preview-panel { border: 0; box-shadow: none; padding: 0; background: white; }
   .invoice { box-shadow: none; }
@@ -192,6 +210,37 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
   border: 1px solid var(--line);
   color: var(--ink);
   font-size: 14px;
+  line-height: 1.45;
+}
+.cta-banner a { color: #f4f7ff; font-weight: 700; }
+.feedback-nudge {
+  position: fixed;
+  z-index: 30;
+  right: 16px;
+  bottom: 16px;
+  width: min(400px, calc(100vw - 32px));
+  padding: 14px 14px 12px;
+  border-radius: 14px;
+  background: #1c2633;
+  border: 1px solid #3d4d63;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+  color: var(--ink);
+}
+.feedback-nudge[hidden] { display: none !important; }
+.feedback-nudge-copy {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.feedback-nudge-copy strong { display: block; margin-bottom: 4px; }
+.feedback-nudge-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.feedback-nudge .btn { padding: 8px 12px; font-size: 13px; }
+@media (prefers-reduced-motion: no-preference) {
+  .feedback-nudge:not([hidden]) { animation: nudge-in .28s ease; }
+}
+@keyframes nudge-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
 }
 .btn.primary {
   box-shadow: 0 8px 24px rgba(91,140,255,.35);

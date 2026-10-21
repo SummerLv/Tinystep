@@ -21,6 +21,9 @@
     downloadBtn: document.getElementById("downloadBtn"),
     printBtn: document.getElementById("printBtn"),
     copyLinkBtn: document.getElementById("copyLinkBtn"),
+    feedbackNudge: document.getElementById("feedbackNudge"),
+    nudgeFeedbackLink: document.getElementById("nudgeFeedbackLink"),
+    dismissNudge: document.getElementById("dismissNudge"),
     payHint: document.getElementById("payHint"),
     payModal: document.getElementById("payModal"),
     confirmPay: document.getElementById("confirmPay"),
@@ -65,8 +68,8 @@
     els.downloadBtn.disabled = !on;
     if (cfg.paymentLink) {
       els.payHint.textContent = on
-        ? "Unlocked on this browser. You can download watermark-free PDF."
-        : "Checkout opens in a secure tab. After paying, return with unlock confirmation.";
+        ? "Unlocked on this browser. You can download a watermark-free PDF. Feedback is still welcome."
+        : "Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.";
       els.payBtn.disabled = on;
     } else {
       els.payHint.textContent = on
@@ -88,8 +91,12 @@
     row.querySelector(".remove").addEventListener("click", () => {
       row.remove();
       render();
+      maybeShowFeedbackNudge();
     });
-    row.querySelectorAll("input").forEach((i) => i.addEventListener("input", render));
+    row.querySelectorAll("input").forEach((i) => i.addEventListener("input", () => {
+      render();
+      maybeShowFeedbackNudge();
+    }));
     els.items.appendChild(row);
   }
 
@@ -202,13 +209,82 @@
   els.addItem.addEventListener("click", () => {
     addItemRow("New item", 1, 50);
     render();
+    maybeShowFeedbackNudge();
   });
   [
     els.fromName, els.fromEmail, els.toName, els.toEmail,
     els.invoiceNo, els.invoiceDate, els.dueDate, els.currency, els.notes,
   ].forEach((el) => el.addEventListener("input", render));
+  [els.fromName, els.fromEmail, els.toName, els.toEmail].forEach((el) => {
+    el.addEventListener("input", maybeShowFeedbackNudge);
+  });
 
   const SHARE_URL = "https://summerlv.github.io/Tinystep/";
+  const NUDGE_KEY = "tinyinvoice_feedback_nudge_v1";
+  let meaningfulBaseline = "";
+  let nudgeTimer = 0;
+
+  function readNudgeFlag() {
+    try {
+      return localStorage.getItem(NUDGE_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  function writeNudgeFlag(value) {
+    try {
+      localStorage.setItem(NUDGE_KEY, value);
+    } catch {
+      // Storage can be blocked; the note still shows for this page load.
+    }
+  }
+
+  function meaningfulSignature() {
+    const items = [...els.items.querySelectorAll(".item-row")].map((row) => ({
+      description: row.querySelector(".desc").value,
+      qty: row.querySelector(".qty").value,
+      rate: row.querySelector(".rate").value,
+    }));
+    return JSON.stringify({
+      fromName: els.fromName.value,
+      fromEmail: els.fromEmail.value,
+      toName: els.toName.value,
+      toEmail: els.toEmail.value,
+      items,
+    });
+  }
+
+  function hideFeedbackNudge() {
+    if (els.feedbackNudge) els.feedbackNudge.hidden = true;
+  }
+
+  function showFeedbackNudge() {
+    if (!els.feedbackNudge || readNudgeFlag()) return;
+    if (meaningfulSignature() === meaningfulBaseline) return;
+    writeNudgeFlag("shown");
+    els.feedbackNudge.hidden = false;
+  }
+
+  function maybeShowFeedbackNudge() {
+    if (!els.feedbackNudge || readNudgeFlag()) return;
+    clearTimeout(nudgeTimer);
+    if (meaningfulSignature() === meaningfulBaseline) return;
+    nudgeTimer = setTimeout(showFeedbackNudge, 600);
+  }
+
+  function dismissFeedbackNudge() {
+    clearTimeout(nudgeTimer);
+    writeNudgeFlag("dismissed");
+    hideFeedbackNudge();
+  }
+
+  els.nudgeFeedbackLink.addEventListener("click", () => {
+    clearTimeout(nudgeTimer);
+    writeNudgeFlag("opened");
+    hideFeedbackNudge();
+  });
+  els.dismissNudge.addEventListener("click", dismissFeedbackNudge);
   let copyResetTimer = 0;
 
   async function copyShareLink() {
@@ -286,9 +362,10 @@
     els.payModal.close();
   });
 
-  // Seed sample lines
+  // Seed sample lines, then remember them so the feedback note waits for a real edit.
   addItemRow("Product design sprint", 1, 900);
   addItemRow("Landing page implementation", 8, 75);
+  meaningfulBaseline = meaningfulSignature();
   handleReturnParams();
   refreshUnlockUI();
   render();
