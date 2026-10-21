@@ -29,6 +29,7 @@
     confirmPay: document.getElementById("confirmPay"),
     addItem: document.getElementById("addItem"),
     fillSampleBtn: document.getElementById("fillSampleBtn"),
+    openDemoBtn: document.getElementById("openDemoBtn"),
     peekParties: document.getElementById("peekParties"),
     peekTotal: document.getElementById("peekTotal"),
     fromField: document.getElementById("fromField"),
@@ -51,6 +52,8 @@
       h1: "Try a free invoice preview in 60 seconds",
       fillSample: "Fill sample invoice",
       sampleFilled: "Sample filled",
+      openDemo: "Open demo draft",
+      demoOpened: "Demo draft open",
       seePreview: "See preview",
       lede: "Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.",
       peekKicker: "Live preview · tap to open",
@@ -122,6 +125,8 @@
       h1: "60 秒免费试用发票预览",
       fillSample: "填入示例发票",
       sampleFilled: "已填入示例",
+      openDemo: "打开演示草稿",
+      demoOpened: "演示已打开",
       seePreview: "查看预览",
       lede: "填写表单 → <strong>实时预览免费</strong>（无需注册）。可选的 $1 PDF 解锁使用 <strong>Stripe 测试</strong>结账，不会真实扣款。欢迎反馈——告诉我们哪里不顺手。",
       peekKicker: "实时预览 · 点按打开",
@@ -211,6 +216,11 @@
         ? t("sampleFilled")
         : t("fillSample");
     }
+    if (els.openDemoBtn) {
+      els.openDemoBtn.textContent = els.openDemoBtn.classList.contains("opened")
+        ? t("demoOpened")
+        : t("openDemo");
+    }
   }
 
   function applyChrome() {
@@ -266,6 +276,26 @@
       { description: "Marketing site design and build", qty: 36, rate: 110 },
     ],
   };
+
+  // Fixed dates keep the public demo #d= link stable. Fill sample still uses today.
+  function demoDraft() {
+    return {
+      fromName: SAMPLE_INVOICE.fromName,
+      fromEmail: SAMPLE_INVOICE.fromEmail,
+      toName: SAMPLE_INVOICE.toName,
+      toEmail: SAMPLE_INVOICE.toEmail,
+      invoiceNo: SAMPLE_INVOICE.invoiceNo,
+      invoiceDate: "2026-10-21",
+      dueDate: "2026-11-04",
+      currency: SAMPLE_INVOICE.currency,
+      notes: SAMPLE_INVOICE.notes,
+      items: SAMPLE_INVOICE.items.map((item) => ({
+        description: item.description,
+        qty: item.qty,
+        rate: item.rate,
+      })),
+    };
+  }
 
   function todayISO() {
     const d = new Date();
@@ -708,6 +738,36 @@
       // Broken or oversized hash: keep the default form.
     }
   }
+
+  let demoResetTimer = 0;
+  let demoFlashTimer = 0;
+
+  function openDemoDraft() {
+    const draft = demoDraft();
+    const fragment = "#d=" + encodeDraft(draft);
+    applyDraft(draft);
+    if (els.fromField) els.fromField.classList.add("sample-ready");
+    // Publish the same #d= fragment Copy link shares. replaceState matches
+    // syncDraftHash so the address bar updates without a scroll jump.
+    if (location.hash !== fragment) {
+      history.replaceState(null, "", location.pathname + location.search + fragment);
+    }
+    const link = els.openDemoBtn;
+    link.textContent = t("demoOpened");
+    link.classList.add("opened");
+    els.invoice.classList.add("just-filled");
+    clearTimeout(demoResetTimer);
+    clearTimeout(demoFlashTimer);
+    demoResetTimer = setTimeout(() => {
+      link.textContent = t("openDemo");
+      link.classList.remove("opened");
+    }, 1600);
+    demoFlashTimer = setTimeout(() => {
+      els.invoice.classList.remove("just-filled");
+    }, 1200);
+    render();
+    scrollToPreview();
+  }
   const NUDGE_KEY = "tinyinvoice_feedback_nudge_v1";
   let meaningfulBaseline = "";
   let nudgeTimer = 0;
@@ -862,4 +922,13 @@
   meaningfulBaseline = meaningfulSignature();
   handleReturnParams();
   applyChrome();
+  if (els.openDemoBtn) {
+    const fragment = "#d=" + encodeDraft(demoDraft());
+    els.openDemoBtn.setAttribute("href", fragment);
+    els.openDemoBtn.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      openDemoDraft();
+    });
+  }
 })();
