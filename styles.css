@@ -31,6 +31,8 @@ body {
   padding: 16px 22px;
   border-bottom: 1px solid var(--line);
 }
+.top { flex-wrap: wrap; gap: 10px; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
 .foot { border-bottom: 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .brand { display: flex; gap: 12px; align-items: center; }
 .logo {
@@ -46,6 +48,19 @@ body {
   border: 1px solid var(--line); color: var(--warn); background: #2a2212;
 }
 .badge.unlocked { color: var(--accent2); background: #123022; border-color: #23563d; }
+.btn.copy-link {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  border-radius: 999px;
+  line-height: 1.2;
+}
+.btn.copy-link.copied {
+  color: var(--accent2);
+  background: #123022;
+  border-color: #23563d;
+}
 .layout {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
