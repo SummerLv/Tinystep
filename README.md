@@ -12,6 +12,6 @@ PDF unlock is optional. The $1 button uses a Stripe **TEST** Payment Link — no
 
 Feedback: [Issue #2](https://github.com/SummerLv/Tinystep/issues/2)
 
-The page keeps **Copy link** and adds a **Leave feedback** button to that issue. After you edit From, Bill to, or a line item, a one-time note (saved in this browser) asks for a one-line comment. Dismiss it with Not now. No signup.
+The page keeps **Copy link** and adds a **Leave feedback** button to that issue. **Copy link** copies the bare site URL while the form is still the default. After you fill or edit the invoice, **Copy link** and **Share on X** include that draft in the link (`#d=`) so a friend opening it sees the same invoice and can edit it. Nothing is uploaded. After you edit From, Bill to, or a line item, a one-time note (saved in this browser) asks for a one-line comment. Dismiss it with Not now. No signup.
 
 免费浏览器发票预览，无需注册。填表即可看到实时预览。页头有 **EN | 中文** 切换，只改界面文字，不改你填的发票内容，选择会记在这个浏览器里。
