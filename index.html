@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("tinyinvoice_lang_v1");
+        var lang = saved === "en" || saved === "zh"
+          ? saved
+          : ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
+        document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
+      } catch (e) {}
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TinyInvoice — Free invoice preview (feedback welcome)</title>
+  <title data-i18n="pageTitle">TinyInvoice — Free invoice preview (feedback welcome)</title>
   <meta name="description" content="Free live invoice preview in the browser. No signup. Feedback welcome." />
   <link rel="canonical" href="https://summerlv.github.io/Tinystep/" />
   <link rel="stylesheet" href="styles.css" />
@@ -23,13 +34,18 @@
       <span class="logo">TI</span>
       <div>
         <strong>TinyInvoice</strong>
-        <div class="tag">Free preview · feedback welcome</div>
+        <div class="tag" data-i18n="tag">Free preview · feedback welcome</div>
       </div>
     </div>
     <div class="header-actions">
-      <a class="btn feedback-cta" id="feedbackCta" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave feedback</a>
-      <a class="btn share-x" id="shareOnX" href="https://twitter.com/intent/tweet?text=TinyInvoice%3A%20free%20live%20invoice%20preview%20in%20the%20browser%20%E2%80%94%20no%20signup.%20Looking%20for%20feedback%3A%20https%3A%2F%2Fsummerlv.github.io%2FTinystep%2F" target="_blank" rel="noopener noreferrer">Share on X</a>
-      <button type="button" class="btn copy-link" id="copyLinkBtn">Copy link</button>
+      <div class="lang-toggle" role="group" data-i18n-aria="langGroup" aria-label="Language">
+        <button type="button" id="langEn" data-set-lang="en" aria-pressed="true">EN</button>
+        <span class="lang-sep" aria-hidden="true">|</span>
+        <button type="button" id="langZh" data-set-lang="zh" aria-pressed="false">中文</button>
+      </div>
+      <a class="btn feedback-cta" id="feedbackCta" data-i18n="feedbackCta" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave feedback</a>
+      <a class="btn share-x" id="shareOnX" data-i18n="shareOnX" href="https://twitter.com/intent/tweet?text=TinyInvoice%3A%20free%20live%20invoice%20preview%20in%20the%20browser%20%E2%80%94%20no%20signup.%20Looking%20for%20feedback%3A%20https%3A%2F%2Fsummerlv.github.io%2FTinystep%2F" target="_blank" rel="noopener noreferrer">Share on X</a>
+      <button type="button" class="btn copy-link" id="copyLinkBtn" data-i18n="copyLink">Copy link</button>
       <div class="badge" id="unlockBadge">Locked</div>
     </div>
   </header>
@@ -37,40 +53,40 @@
   <main class="layout">
     <section class="panel form-panel">
       <div class="form-head">
-        <h1>Try a free invoice preview in 60 seconds</h1>
+        <h1 data-i18n="h1">Try a free invoice preview in 60 seconds</h1>
         <div class="try-bar" id="tryBar">
-          <button type="button" class="btn sample" id="fillSampleBtn">Fill sample invoice</button>
-          <a class="btn see-preview" href="#livePreview">See preview</a>
+          <button type="button" class="btn sample" id="fillSampleBtn" data-i18n="fillSample">Fill sample invoice</button>
+          <a class="btn see-preview" href="#livePreview" data-i18n="seePreview">See preview</a>
         </div>
       </div>
-      <p class="lede">Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.</p>
+      <p class="lede" data-i18n-html="lede">Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.</p>
       <a class="preview-peek" id="previewPeek" href="#livePreview">
-        <span class="peek-kicker">Live preview · tap to open</span>
+        <span class="peek-kicker" data-i18n="peekKicker">Live preview · tap to open</span>
         <span class="peek-parties" id="peekParties">Alex Rivera → Northwind Labs</span>
         <span class="peek-total" id="peekTotal">Total $1,500.00</span>
       </a>
-      <p class="cta-banner" id="ctaBanner">Fill sample invoice, or edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).</p>
+      <p class="cta-banner" id="ctaBanner" data-i18n-html="ctaBanner">Fill sample invoice, or edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).</p>
 
       <div class="grid2">
-        <label class="touch-edit" id="fromField">From (you)
-          <input id="fromName" placeholder="Acme Studio" value="Alex Rivera" />
+        <label class="touch-edit" id="fromField"><span data-i18n="fromYou">From (you)</span>
+          <input id="fromName" data-i18n-placeholder="phFromName" placeholder="Acme Studio" value="Alex Rivera" />
         </label>
-        <label>From email
-          <input id="fromEmail" type="email" placeholder="alex@example.com" value="alex@example.com" />
+        <label><span data-i18n="fromEmail">From email</span>
+          <input id="fromEmail" type="email" data-i18n-placeholder="phFromEmail" placeholder="alex@example.com" value="alex@example.com" />
         </label>
-        <label>Bill to
-          <input id="toName" placeholder="Client Co." value="Northwind Labs" />
+        <label><span data-i18n="billTo">Bill to</span>
+          <input id="toName" data-i18n-placeholder="phToName" placeholder="Client Co." value="Northwind Labs" />
         </label>
-        <label>Client email
-          <input id="toEmail" type="email" placeholder="ap@client.com" value="ap@northwind.example" />
+        <label><span data-i18n="clientEmail">Client email</span>
+          <input id="toEmail" type="email" data-i18n-placeholder="phToEmail" placeholder="ap@client.com" value="ap@northwind.example" />
         </label>
-        <label>Invoice #
+        <label><span data-i18n="invoiceNo">Invoice #</span>
           <input id="invoiceNo" value="INV-1001" />
         </label>
-        <label>Date
+        <label><span data-i18n="date">Date</span>
           <input id="invoiceDate" type="date" />
         </label>
-        <label>Currency
+        <label><span data-i18n="currency">Currency</span>
           <select id="currency">
             <option value="USD" selected>USD</option>
             <option value="CNY">CNY</option>
@@ -80,63 +96,63 @@
             <option value="SGD">SGD</option>
           </select>
         </label>
-        <label>Due date
+        <label><span data-i18n="dueDate">Due date</span>
           <input id="dueDate" type="date" />
         </label>
       </div>
 
-      <h2>Line items</h2>
+      <h2 data-i18n="lineItems">Line items</h2>
       <div id="items"></div>
-      <button type="button" class="btn ghost" id="addItem">+ Add line</button>
+      <button type="button" class="btn ghost" id="addItem" data-i18n="addLine">+ Add line</button>
 
-      <label class="notes">Notes
-        <textarea id="notes" rows="3" placeholder="Payment terms, bank details…">Thanks for your business. Payment due within 14 days.</textarea>
+      <label class="notes"><span data-i18n="notes">Notes</span>
+        <textarea id="notes" rows="3" data-i18n-placeholder="phNotes" placeholder="Payment terms, bank details…">Thanks for your business. Payment due within 14 days.</textarea>
       </label>
 
       <div class="actions">
-        <button type="button" class="btn" id="payBtn">Unlock PDF — $1 test</button>
-        <button type="button" class="btn" id="downloadBtn" disabled>Download PDF</button>
-        <button type="button" class="btn ghost" id="printBtn">Print preview</button>
+        <button type="button" class="btn" id="payBtn" data-i18n="payBtn">Unlock PDF — $1 test</button>
+        <button type="button" class="btn" id="downloadBtn" data-i18n="downloadBtn" disabled>Download PDF</button>
+        <button type="button" class="btn ghost" id="printBtn" data-i18n="printBtn">Print preview</button>
       </div>
       <p class="hint" id="payHint">Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.</p>
     </section>
 
     <section class="panel preview-panel" id="livePreview">
       <div class="preview-toolbar">
-        <strong>Live preview</strong>
+        <strong data-i18n="livePreview">Live preview</strong>
         <span class="muted" id="totalLabel">Total $0.00</span>
       </div>
       <div id="invoice" class="invoice">
         <!-- rendered by app.js -->
       </div>
-      <div class="watermark" id="watermark">PREVIEW · TinyInvoice</div>
+      <div class="watermark" id="watermark" data-i18n="watermark">PREVIEW · TinyInvoice</div>
     </section>
   </main>
 
   <footer class="foot">
-    <span>TinyInvoice · free preview · optional $1 test PDF · no account</span>
-    <a href="#privacy" id="privacyLink">Privacy</a>
+    <span data-i18n="footer">TinyInvoice · free preview · optional $1 test PDF · no account</span>
+    <a href="#privacy" id="privacyLink" data-i18n="privacy">Privacy</a>
   </footer>
 
   <dialog id="payModal">
     <form method="dialog" class="modal">
-      <h3>Optional PDF unlock ($1 test)</h3>
-      <p>This opens a <strong>Stripe TEST</strong> checkout. It is not a live charge and does not require an account. The free preview stays available either way.</p>
+      <h3 data-i18n="modalTitle">Optional PDF unlock ($1 test)</h3>
+      <p data-i18n-html="modalBody">This opens a <strong>Stripe TEST</strong> checkout. It is not a live charge and does not require an account. The free preview stays available either way.</p>
       <div class="modal-actions">
-        <button class="btn ghost" value="cancel">Cancel</button>
-        <button class="btn primary" id="confirmPay" value="default">Continue to test checkout</button>
+        <button class="btn ghost" value="cancel" data-i18n="cancel">Cancel</button>
+        <button class="btn primary" id="confirmPay" value="default" data-i18n="continuePay">Continue to test checkout</button>
       </div>
     </form>
   </dialog>
 
   <div id="feedbackNudge" class="feedback-nudge" hidden role="status" aria-live="polite">
     <p class="feedback-nudge-copy">
-      <strong>Preview updated.</strong>
-      A one-line comment on Issue #2 helps — what felt off? No signup.
+      <strong data-i18n="nudgeTitle">Preview updated.</strong>
+      <span data-i18n="nudgeBody">A one-line comment on Issue #2 helps — what felt off? No signup.</span>
     </p>
     <div class="feedback-nudge-actions">
-      <a class="btn primary" id="nudgeFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Comment on Issue #2</a>
-      <button type="button" class="btn ghost" id="dismissNudge">Not now</button>
+      <a class="btn primary" id="nudgeFeedbackLink" data-i18n="nudgeCta" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Comment on Issue #2</a>
+      <button type="button" class="btn ghost" id="dismissNudge" data-i18n="notNow">Not now</button>
     </div>
   </div>
 
