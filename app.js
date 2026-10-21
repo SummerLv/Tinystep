@@ -197,7 +197,8 @@
   }
 
   function shareHref() {
-    return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(t("shareText"));
+    const text = t("shareText").replace(SHARE_URL, currentShareUrl());
+    return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
   }
 
   function applyTransientLabels() {
@@ -315,11 +316,14 @@
     const row = document.createElement("div");
     row.className = "item-row";
     row.innerHTML = `
-      <label><span data-i18n="description">${t("description")}</span><input class="desc" value="${desc.replace(/"/g, "&quot;")}" /></label>
-      <label><span data-i18n="qty">${t("qty")}</span><input class="qty" type="number" min="0" step="0.01" value="${qty}" /></label>
-      <label><span data-i18n="rate">${t("rate")}</span><input class="rate" type="number" min="0" step="0.01" value="${rate}" /></label>
+      <label><span data-i18n="description">${t("description")}</span><input class="desc" /></label>
+      <label><span data-i18n="qty">${t("qty")}</span><input class="qty" type="number" min="0" step="0.01" /></label>
+      <label><span data-i18n="rate">${t("rate")}</span><input class="rate" type="number" min="0" step="0.01" /></label>
       <button type="button" class="btn ghost danger remove" data-i18n-title="remove" title="${t("remove")}">✕</button>
     `;
+    row.querySelector(".desc").value = desc;
+    row.querySelector(".qty").value = qty;
+    row.querySelector(".rate").value = rate;
     row.querySelector(".remove").addEventListener("click", () => {
       row.remove();
       render();
@@ -408,6 +412,9 @@
       </div>
       <div class="inv-notes">${escapeHtml(els.notes.value)}</div>
     `;
+    const share = document.getElementById("shareOnX");
+    if (share) share.href = shareHref();
+    syncDraftHash();
   }
 
   function escapeHtml(s) {
@@ -499,9 +506,12 @@
 
   document.querySelectorAll('a[href="#livePreview"]').forEach((link) => {
     link.addEventListener("click", (event) => {
-      if (!window.matchMedia("(max-width: 960px)").matches) return;
+      const mobile = window.matchMedia("(max-width: 960px)").matches;
+      // Keep a draft hash in the address bar. Native #livePreview navigation would replace it.
+      if (!mobile && !location.hash.startsWith("#d=")) return;
       event.preventDefault();
-      scrollToPreview();
+      if (mobile) scrollToPreview();
+      else document.getElementById("livePreview")?.scrollIntoView({ block: "nearest" });
     });
   });
 
@@ -531,6 +541,173 @@
   });
 
   const SHARE_URL = "https://summerlv.github.io/Tinystep/";
+  // #d=<base64url JSON>. Hash is not sent to the server. Ignore anything past a typical shareable URL.
+  const MAX_SHARE_URL = 8000;
+  const MAX_DRAFT_ITEMS = 40;
+  const MAX_DRAFT_FIELD = 4000;
+  const CURRENCIES = new Set(["USD", "CNY", "HKD", "EUR", "GBP", "SGD"]);
+  let defaultDraft = null;
+
+  function base64UrlEncode(text) {
+    const bytes = new TextEncoder().encode(text);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  }
+
+  function base64UrlDecode(text) {
+    const b64 = text.replace(/-/g, "+").replace(/_/g, "/");
+    const pad = b64.length % 4 === 0 ? "" : "=".repeat(4 - (b64.length % 4));
+    const bin = atob(b64 + pad);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function readDraft() {
+    const items = [...els.items.querySelectorAll(".item-row")].map((row) => {
+      const qty = Number(row.querySelector(".qty").value);
+      const rate = Number(row.querySelector(".rate").value);
+      return {
+        description: row.querySelector(".desc").value,
+        qty: Number.isFinite(qty) ? qty : 0,
+        rate: Number.isFinite(rate) ? rate : 0,
+      };
+    });
+    return {
+      fromName: els.fromName.value,
+      fromEmail: els.fromEmail.value,
+      toName: els.toName.value,
+      toEmail: els.toEmail.value,
+      invoiceNo: els.invoiceNo.value,
+      invoiceDate: els.invoiceDate.value,
+      dueDate: els.dueDate.value,
+      currency: els.currency.value,
+      notes: els.notes.value,
+      items,
+    };
+  }
+
+  function isISODate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const [y, m, d] = value.split("-").map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+  }
+
+  function boundedString(value, max) {
+    if (typeof value !== "string" || value.length > max) return null;
+    return value;
+  }
+
+  function draftFromPayload(data) {
+    if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+    const fromName = boundedString(data.fn, MAX_DRAFT_FIELD);
+    const fromEmail = boundedString(data.fe, MAX_DRAFT_FIELD);
+    const toName = boundedString(data.tn, MAX_DRAFT_FIELD);
+    const toEmail = boundedString(data.te, MAX_DRAFT_FIELD);
+    const invoiceNo = boundedString(data.no, MAX_DRAFT_FIELD);
+    const invoiceDate = boundedString(data.dt, 10);
+    const dueDate = boundedString(data.du, 10);
+    const currency = boundedString(data.c, 8);
+    const notes = boundedString(data.nt, MAX_DRAFT_FIELD);
+    if ([fromName, fromEmail, toName, toEmail, invoiceNo, invoiceDate, dueDate, currency, notes].includes(null)) return null;
+    if (!isISODate(invoiceDate) || !isISODate(dueDate) || !CURRENCIES.has(currency)) return null;
+    if (!Array.isArray(data.i) || data.i.length > MAX_DRAFT_ITEMS) return null;
+    const items = [];
+    for (const row of data.i) {
+      if (!Array.isArray(row) || row.length < 3) return null;
+      const description = boundedString(row[0], MAX_DRAFT_FIELD);
+      const qty = typeof row[1] === "number" ? row[1] : NaN;
+      const rate = typeof row[2] === "number" ? row[2] : NaN;
+      if (description === null || !Number.isFinite(qty) || !Number.isFinite(rate)) return null;
+      if (qty < 0 || rate < 0 || qty > 1e9 || rate > 1e9) return null;
+      items.push({ description, qty, rate });
+    }
+    return { fromName, fromEmail, toName, toEmail, invoiceNo, invoiceDate, dueDate, currency, notes, items };
+  }
+
+  function encodeDraft(draft) {
+    return base64UrlEncode(JSON.stringify({
+      fn: draft.fromName,
+      fe: draft.fromEmail,
+      tn: draft.toName,
+      te: draft.toEmail,
+      no: draft.invoiceNo,
+      dt: draft.invoiceDate,
+      du: draft.dueDate,
+      c: draft.currency,
+      nt: draft.notes,
+      i: draft.items.map((item) => [item.description, item.qty, item.rate]),
+    }));
+  }
+
+  function isBlankDraft(draft) {
+    const texts = [draft.fromName, draft.fromEmail, draft.toName, draft.toEmail, draft.invoiceNo, draft.notes];
+    if (texts.some((value) => String(value).trim())) return false;
+    return draft.items.every((item) => !String(item.description).trim() && !item.qty && !item.rate);
+  }
+
+  function draftFragment() {
+    if (!defaultDraft) return "";
+    const draft = readDraft();
+    if (JSON.stringify(draft) === JSON.stringify(defaultDraft) || isBlankDraft(draft)) return "";
+    try {
+      const fragment = "#d=" + encodeDraft(draft);
+      if ((SHARE_URL + fragment).length > MAX_SHARE_URL) return "";
+      return fragment;
+    } catch {
+      return "";
+    }
+  }
+
+  function currentShareUrl() {
+    const fragment = draftFragment();
+    return fragment ? SHARE_URL + fragment : SHARE_URL;
+  }
+
+  function syncDraftHash() {
+    const fragment = draftFragment();
+    if (location.hash === fragment) return;
+    if (!fragment && !location.hash.startsWith("#d=")) return;
+    history.replaceState(null, "", location.pathname + location.search + fragment);
+  }
+
+  function applyDraft(draft) {
+    els.fromName.value = draft.fromName;
+    els.fromEmail.value = draft.fromEmail;
+    els.toName.value = draft.toName;
+    els.toEmail.value = draft.toEmail;
+    els.invoiceNo.value = draft.invoiceNo;
+    els.invoiceDate.value = draft.invoiceDate;
+    els.dueDate.value = draft.dueDate;
+    els.currency.value = draft.currency;
+    els.notes.value = draft.notes;
+    els.items.replaceChildren();
+    draft.items.forEach((item) => addItemRow(item.description, item.qty, item.rate));
+  }
+
+  function hashFragment() {
+    let hash = location.hash || "";
+    if (!hash.startsWith("#")) return "";
+    try { hash = decodeURIComponent(hash); } catch { /* keep the raw hash */ }
+    return hash;
+  }
+
+  function loadDraftFromHash() {
+    const hash = hashFragment();
+    if (!hash.startsWith("#d=")) return;
+    const payload = hash.slice(3).replace(/=+$/g, "");
+    if (!payload || !/^[A-Za-z0-9_-]+$/.test(payload)) return;
+    if ((SHARE_URL.length + 3 + payload.length) > MAX_SHARE_URL) return;
+    try {
+      const draft = draftFromPayload(JSON.parse(base64UrlDecode(payload)));
+      if (!draft) return;
+      applyDraft(draft);
+    } catch {
+      // Broken or oversized hash: keep the default form.
+    }
+  }
   const NUDGE_KEY = "tinyinvoice_feedback_nudge_v1";
   let meaningfulBaseline = "";
   let nudgeTimer = 0;
@@ -600,12 +777,13 @@
 
   async function copyShareLink() {
     const btn = els.copyLinkBtn;
+    const url = currentShareUrl();
     try {
       if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(SHARE_URL);
+        await navigator.clipboard.writeText(url);
       } else {
         const field = document.createElement("textarea");
-        field.value = SHARE_URL;
+        field.value = url;
         field.setAttribute("readonly", "");
         field.style.position = "fixed";
         field.style.left = "-9999px";
@@ -676,9 +854,11 @@
     els.payModal.close();
   });
 
-  // Seed sample lines, then remember them so the feedback note waits for a real edit.
+  // Seed the default lines, remember that empty state, then apply a shared draft if the hash is valid.
   addItemRow("Product design sprint", 1, 900);
   addItemRow("Landing page implementation", 8, 75);
+  defaultDraft = readDraft();
+  loadDraftFromHash();
   meaningfulBaseline = meaningfulSignature();
   handleReturnParams();
   applyChrome();
