@@ -30,6 +30,23 @@
   <meta name="twitter:title" content="TinyInvoice — free live invoice preview" />
   <meta name="twitter:description" content="Free live invoice preview in the browser. No signup. Feedback welcome." />
   <meta name="twitter:url" content="https://summerlv.github.io/Tinystep/" />
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TinyInvoice",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://summerlv.github.io/Tinystep/",
+    "description": "Free live invoice preview in the browser. No signup. Print or save as PDF for free.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
 </head>
 <body>
   <header class="top">
@@ -42,8 +59,12 @@
     </div>
     <div class="header-actions">
       <a class="btn feedback-cta" id="feedbackCta" data-i18n="feedbackCta" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave feedback</a>
-      <a class="btn share-x" id="shareOnX" data-i18n="shareOnX" href="https://twitter.com/intent/tweet?text=TinyInvoice%3A%20free%20live%20invoice%20preview%20in%20the%20browser%20%E2%80%94%20no%20signup.%20Looking%20for%20feedback%3A%20https%3A%2F%2Fsummerlv.github.io%2FTinystep%2F" target="_blank" rel="noopener noreferrer">Share on X</a>
+      <a class="btn share-x" id="shareOnX" data-i18n="shareOnX" href="https://twitter.com/intent/tweet?text=TinyInvoice%3A%20free%20live%20invoice%20preview%20in%20the%20browser%20%E2%80%94%20no%20signup.%20Looking%20for%20feedback%3A%20https%3A%2F%2Fis.gd%2F9uVOG5" target="_blank" rel="noopener noreferrer">Share on X</a>
       <button type="button" class="btn copy-link" id="copyLinkBtn" data-i18n="copyLink">Copy link</button>
+      <a class="short-share" id="shortShareLink" href="https://is.gd/9uVOG5" data-i18n-aria="shortLinkAria" data-i18n-title="shortLinkLabel" title="Short link" aria-label="Short link. Copies https://is.gd/9uVOG5">
+        <span class="short-kicker" data-i18n="shortLinkLabel">Short link</span>
+        <span class="short-url">is.gd/9uVOG5</span>
+      </a>
       <div class="lang-toggle" role="group" data-i18n-aria="langGroup" aria-label="Language">
         <button type="button" id="langEn" data-set-lang="en" aria-pressed="true">EN</button>
         <span class="lang-sep" aria-hidden="true">|</span>
@@ -57,7 +78,7 @@
     <section class="first-try" aria-labelledby="firstTryTitle">
       <p class="first-try-copy">
         <strong id="firstTryTitle" data-i18n="firstTryTitle">See a finished invoice</strong>
-        <span data-i18n="firstTryBody">One tap opens the demo draft. Then Print / Save as PDF — free, no signup.</span>
+        <span data-i18n="firstTryBody">Open demo draft → live preview → Print / Save as PDF. Free, no signup.</span>
       </p>
       <div class="first-try-actions">
         <a class="btn primary first-try-cta" id="firstTryBtn" href="#d=" data-i18n="firstTryCta">Open demo draft</a>
@@ -74,7 +95,7 @@
           <button type="button" class="btn sample" id="fillSampleBtn" data-i18n="fillSample">Fill sample invoice</button>
           <a class="btn demo" id="openDemoBtn" href="#d=" data-i18n="openDemo">Open demo draft</a>
           <button type="button" class="btn print-free" id="printFreeBtn" data-i18n="printBtn">Print / Save as PDF (free)</button>
-          <a class="btn see-preview" href="#livePreview" data-i18n="seePreview">See preview</a>
+          <a class="btn see-preview" href="#livePreview" data-i18n="seePreview">Live preview</a>
         </div>
       </div>
       <p class="lede" data-i18n-html="lede">Open demo draft → <strong>Print / Save as PDF (free)</strong> — no signup and no payment. Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge.</p>
