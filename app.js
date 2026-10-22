@@ -1,6 +1,8 @@
 (function () {
   const cfg = window.TINYINVOICE_CONFIG || {};
   const UNLOCK_KEY = "tinyinvoice_unlocked_v1";
+  // Entry short link. Draft shares still use the canonical Pages URL plus #d=.
+  const SHORT_SHARE_URL = "https://is.gd/9uVOG5";
 
   const els = {
     fromName: document.getElementById("fromName"),
@@ -48,6 +50,8 @@
       copyLink: "Copy link",
       copied: "Copied!",
       copyFailed: "Copy failed",
+      shortLinkLabel: "Short link",
+      shortLinkAria: "Short link. Copies https://is.gd/9uVOG5",
       locked: "Locked",
       unlocked: "Unlocked",
       h1: "Try a free invoice preview in 60 seconds",
@@ -55,9 +59,9 @@
       sampleFilled: "Sample filled",
       openDemo: "Open demo draft",
       demoOpened: "Demo draft open",
-      seePreview: "See preview",
+      seePreview: "Live preview",
       firstTryTitle: "See a finished invoice",
-      firstTryBody: "One tap opens the demo draft. Then Print / Save as PDF — free, no signup.",
+      firstTryBody: "Open demo draft → live preview → Print / Save as PDF. Free, no signup.",
       firstTryCta: "Open demo draft",
       lede: "Open demo draft → <strong>Print / Save as PDF (free)</strong> — no signup and no payment. Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge.",
       peekKicker: "Live preview · tap to open",
@@ -124,6 +128,8 @@
       copyLink: "复制链接",
       copied: "已复制",
       copyFailed: "复制失败",
+      shortLinkLabel: "短链接",
+      shortLinkAria: "短链接。点击复制 https://is.gd/9uVOG5",
       locked: "未解锁",
       unlocked: "已解锁",
       h1: "60 秒免费试用发票预览",
@@ -131,9 +137,9 @@
       sampleFilled: "已填入示例",
       openDemo: "打开演示草稿",
       demoOpened: "演示已打开",
-      seePreview: "查看预览",
+      seePreview: "实时预览",
       firstTryTitle: "先看一张填好的发票",
-      firstTryBody: "点一下打开演示草稿。然后用浏览器免费导出 PDF，无需注册。",
+      firstTryBody: "打开演示草稿 → 实时预览 → 免费导出 PDF。无需注册。",
       firstTryCta: "打开演示草稿",
       lede: "打开演示草稿 → <strong>浏览器打印 · 免费导出 PDF</strong>——无需注册，也无需付款。可选的 $1 PDF 解锁使用 <strong>Stripe 测试</strong>结账，不会真实扣款。",
       peekKicker: "实时预览 · 点按打开",
@@ -209,7 +215,9 @@
   }
 
   function shareHref() {
-    const text = t("shareText").replace(SHARE_URL, currentShareUrl());
+    // A draft needs the canonical URL so #d= survives. The bare entry uses the short link.
+    const target = draftFragment() ? currentShareUrl() : SHORT_SHARE_URL;
+    const text = t("shareText").replace(SHARE_URL, target);
     return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
   }
 
@@ -218,6 +226,13 @@
     if (copyBtn.classList.contains("copied")) copyBtn.textContent = t("copied");
     else if (copyBtn.dataset.failed === "1") copyBtn.textContent = t("copyFailed");
     else copyBtn.textContent = t("copyLink");
+    const shortLink = document.getElementById("shortShareLink");
+    const shortKicker = shortLink && shortLink.querySelector(".short-kicker");
+    if (shortKicker) {
+      if (shortLink.classList.contains("copied")) shortKicker.textContent = t("copied");
+      else if (shortLink.dataset.failed === "1") shortKicker.textContent = t("copyFailed");
+      else shortKicker.textContent = t("shortLinkLabel");
+    }
     if (els.fillSampleBtn) {
       els.fillSampleBtn.textContent = els.fillSampleBtn.classList.contains("filled")
         ? t("sampleFilled")
@@ -842,25 +857,30 @@
   });
   els.dismissNudge.addEventListener("click", dismissFeedbackNudge);
   let copyResetTimer = 0;
+  let shortCopyResetTimer = 0;
+
+  async function writeClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.left = "-9999px";
+    document.body.appendChild(field);
+    field.select();
+    const ok = document.execCommand("copy");
+    field.remove();
+    if (!ok) throw new Error("copy failed");
+  }
 
   async function copyShareLink() {
     const btn = els.copyLinkBtn;
     const url = currentShareUrl();
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(url);
-      } else {
-        const field = document.createElement("textarea");
-        field.value = url;
-        field.setAttribute("readonly", "");
-        field.style.position = "fixed";
-        field.style.left = "-9999px";
-        document.body.appendChild(field);
-        field.select();
-        const ok = document.execCommand("copy");
-        field.remove();
-        if (!ok) throw new Error("copy failed");
-      }
+      await writeClipboard(url);
       delete btn.dataset.failed;
       btn.textContent = t("copied");
       btn.classList.add("copied");
@@ -877,9 +897,39 @@
     }, 1600);
   }
 
+  async function copyShortLink() {
+    const link = document.getElementById("shortShareLink");
+    const kicker = link && link.querySelector(".short-kicker");
+    if (!link || !kicker) return;
+    try {
+      await writeClipboard(SHORT_SHARE_URL);
+      delete link.dataset.failed;
+      kicker.textContent = t("copied");
+      link.classList.add("copied");
+    } catch {
+      link.dataset.failed = "1";
+      kicker.textContent = t("copyFailed");
+      link.classList.remove("copied");
+    }
+    clearTimeout(shortCopyResetTimer);
+    shortCopyResetTimer = setTimeout(() => {
+      delete link.dataset.failed;
+      link.classList.remove("copied");
+      kicker.textContent = t("shortLinkLabel");
+    }, 1600);
+  }
+
   els.copyLinkBtn.addEventListener("click", () => {
     copyShareLink();
   });
+  const shortShareLink = document.getElementById("shortShareLink");
+  if (shortShareLink) {
+    shortShareLink.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      copyShortLink();
+    });
+  }
   document.querySelectorAll(".print-free").forEach((btn) => {
     btn.addEventListener("click", () => window.print());
   });

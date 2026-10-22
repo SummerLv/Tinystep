@@ -2,11 +2,13 @@
 
 ## Try it · 试用
 
-Official preview: [https://summerlv.github.io/Tinystep/](https://summerlv.github.io/Tinystep/)
+Short link: **[https://is.gd/9uVOG5](https://is.gd/9uVOG5)**
 
-**Free path (no signup, no payment):** open the site → **Open demo draft** → **Print / Save as PDF (free)**. In the print dialog, choose **Save as PDF**.
+Canonical page: [https://summerlv.github.io/Tinystep/](https://summerlv.github.io/Tinystep/)
 
-**免费路径（无需注册、无需付款）：** 打开网站 → **打开演示草稿** → **浏览器打印 · 免费导出 PDF**。在打印对话框中选择**另存为 PDF**。
+**Free path (no signup, no payment):** open the short link → **Open demo draft** → **live preview** → **Print / Save as PDF (free)**. In the print dialog, choose **Save as PDF**.
+
+**免费路径（无需注册、无需付款）：** 打开短链接 → **打开演示草稿** → **实时预览** → **浏览器打印 · 免费导出 PDF**。在打印对话框中选择**另存为 PDF**。
 
 **[Open demo draft](https://summerlv.github.io/Tinystep/#d=eyJmbiI6Ik1heWEgQ2hlbiIsImZlIjoiaGVsbG9AbWF5YWNoZW4uc3R1ZGlvIiwidG4iOiJOb3J0aGxpbmUgR29vZHMiLCJ0ZSI6ImFjY291bnRzQG5vcnRobGluZWdvb2RzLmV4YW1wbGUiLCJubyI6IklOVi0yMDQ4IiwiZHQiOiIyMDI2LTEwLTIxIiwiZHUiOiIyMDI2LTExLTA0IiwiYyI6IlVTRCIsIm50IjoiUGF5bWVudCBkdWUgd2l0aGluIDE0IGRheXMgb2YgdGhlIGludm9pY2UgZGF0ZS5cbkFDSCBvciB3aXJlLiBQbGVhc2UgaW5jbHVkZSBJTlYtMjA0OCBvbiB0aGUgdHJhbnNmZXIuXG5Db3ZlcnMgYnJhbmQgaWRlbnRpdHksIG1hcmtldGluZyBzaXRlIGRlc2lnbiwgYW5kIGZyb250ZW5kIGltcGxlbWVudGF0aW9uIGZvciB0aGUgc3ByaW5nIGxhdW5jaC5cblRoYW5rIHlvdSDigJQgTWF5YSBDaGVuIFN0dWRpby4iLCJpIjpbWyJCcmFuZCB3b3Jrc2hvcCBhbmQgZGlzY292ZXJ5IiwxLDEyMDBdLFsiVmlzdWFsIGlkZW50aXR5IHN5c3RlbSIsMSwyODAwXSxbIk1hcmtldGluZyBzaXRlIGRlc2lnbiBhbmQgYnVpbGQiLDM2LDExMF1dfQ)**
 
@@ -22,6 +24,6 @@ Free live invoice preview in the browser — no signup.
 
 Feedback: [Issue #2](https://github.com/SummerLv/Tinystep/issues/2)
 
-The page keeps **Copy link** and a **Leave feedback** button to that issue. **Copy link** copies the bare site URL while the form is still the default. After you open the demo draft, fill the sample, or edit the invoice, **Copy link** and **Share on X** include that draft in the link (`#d=`) so a friend opening it sees the same invoice and can edit it. Nothing is uploaded. After you edit From, Bill to, or a line item, a one-time note (saved in this browser) asks for a one-line comment. Dismiss it with Not now. No signup.
+The page keeps **Copy link**, a **Short link** (`is.gd/9uVOG5`), and a **Leave feedback** button to that issue. **Short link** always points at the canonical entry above. **Copy link** copies the full Pages URL while the form is still the default. After you open the demo draft, fill the sample, or edit the invoice, **Copy link** and **Share on X** include that draft in the link (`#d=`) so a friend opening it sees the same invoice and can edit it. Nothing is uploaded. After you edit From, Bill to, or a line item, a one-time note (saved in this browser) asks for a one-line comment. Dismiss it with Not now. No signup.
 
 免费浏览器发票预览，无需注册。**打开演示草稿** 会通过分享链接打开同一张示例发票。第一次打开、链接里没有草稿时，页头下方的大按钮也是打开演示草稿。**浏览器打印 · 免费导出 PDF** 可直接打印该预览，或在打印对话框里另存为 PDF。页头 **EN | 中文** 只改界面文字，不改你填的发票内容，选择会记在这个浏览器里。
