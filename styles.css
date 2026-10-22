@@ -108,6 +108,45 @@ a.btn {
   border-color: transparent;
 }
 .btn.feedback-cta:hover { filter: brightness(1.08); }
+.first-try-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 18px 0;
+}
+.first-try {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 20px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, #1a2a4a, #163528);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 10px 32px rgba(91, 140, 255, .2);
+}
+.first-try-copy { margin: 0; min-width: 0; }
+.first-try-copy strong {
+  display: block;
+  font-size: 18px;
+  letter-spacing: -.02em;
+  margin-bottom: 2px;
+}
+.first-try-copy span {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+a.btn.first-try-cta {
+  flex: 0 0 auto;
+  min-height: 48px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+}
+html.has-draft .first-try-wrap { display: none; }
 .layout {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
@@ -266,6 +305,9 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
 .modal { padding: 20px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 @media (max-width: 960px) {
+  .first-try-wrap { padding: 12px 12px 0; }
+  .first-try { flex-direction: column; align-items: stretch; }
+  a.btn.first-try-cta { width: 100%; white-space: normal; text-align: center; }
   .layout { grid-template-columns: 1fr; padding: 12px; gap: 12px; }
   .grid2 { grid-template-columns: 1fr; }
   .item-row { grid-template-columns: minmax(0, 1.4fr) 3.5rem 4.8rem auto; }
@@ -405,7 +447,7 @@ dialog::backdrop { background: rgba(0,0,0,.55); }
 }
 @media print {
   body { background: white; padding-bottom: 0; }
-  .top, .foot, .form-panel, .preview-toolbar, .watermark, .feedback-nudge, .try-bar, .preview-peek { display: none !important; }
+  .top, .foot, .form-panel, .preview-toolbar, .watermark, .feedback-nudge, .try-bar, .preview-peek, .first-try-wrap { display: none !important; }
   .layout { display: block; padding: 0; }
   .preview-panel { border: 0; box-shadow: none; padding: 0; background: white; }
   .invoice { box-shadow: none; min-height: 0; }

@@ -11,6 +11,9 @@
           : ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
         document.documentElement.lang = lang === "zh" ? "zh-Hans" : "en";
       } catch (e) {}
+      if ((location.hash || "").indexOf("#d=") === 0) {
+        document.documentElement.classList.add("has-draft");
+      }
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -49,6 +52,16 @@
       <div class="badge" id="unlockBadge">Locked</div>
     </div>
   </header>
+
+  <div class="first-try-wrap" id="firstTryWrap">
+    <section class="first-try" aria-labelledby="firstTryTitle">
+      <p class="first-try-copy">
+        <strong id="firstTryTitle" data-i18n="firstTryTitle">See a finished invoice</strong>
+        <span data-i18n="firstTryBody">One tap opens the demo draft and the live preview. No signup.</span>
+      </p>
+      <a class="btn primary first-try-cta" id="firstTryBtn" href="#d=" data-i18n="firstTryCta">Open demo draft</a>
+    </section>
+  </div>
 
   <main class="layout">
     <section class="panel form-panel">
