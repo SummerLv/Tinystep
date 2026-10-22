@@ -30,6 +30,7 @@
     addItem: document.getElementById("addItem"),
     fillSampleBtn: document.getElementById("fillSampleBtn"),
     openDemoBtn: document.getElementById("openDemoBtn"),
+    firstTryBtn: document.getElementById("firstTryBtn"),
     peekParties: document.getElementById("peekParties"),
     peekTotal: document.getElementById("peekTotal"),
     fromField: document.getElementById("fromField"),
@@ -55,6 +56,9 @@
       openDemo: "Open demo draft",
       demoOpened: "Demo draft open",
       seePreview: "See preview",
+      firstTryTitle: "See a finished invoice",
+      firstTryBody: "One tap opens the demo draft and the live preview. No signup.",
+      firstTryCta: "Open demo draft",
       lede: "Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.",
       peekKicker: "Live preview · tap to open",
       ctaBanner: 'Fill sample invoice, or edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).',
@@ -128,6 +132,9 @@
       openDemo: "打开演示草稿",
       demoOpened: "演示已打开",
       seePreview: "查看预览",
+      firstTryTitle: "先看一张填好的发票",
+      firstTryBody: "点一下打开演示草稿和实时预览，无需注册。",
+      firstTryCta: "打开演示草稿",
       lede: "填写表单 → <strong>实时预览免费</strong>（无需注册）。可选的 $1 PDF 解锁使用 <strong>Stripe 测试</strong>结账，不会真实扣款。欢迎反馈——告诉我们哪里不顺手。",
       peekKicker: "实时预览 · 点按打开",
       ctaBanner: '填入示例发票，或修改开票方、账单接收方或一行明细——实时预览免费。<a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">在 Issue #2 留一句评论</a>。PDF 解锁可选（Stripe 测试）。',
@@ -698,9 +705,10 @@
 
   function syncDraftHash() {
     const fragment = draftFragment();
-    if (location.hash === fragment) return;
-    if (!fragment && !location.hash.startsWith("#d=")) return;
-    history.replaceState(null, "", location.pathname + location.search + fragment);
+    if (location.hash !== fragment && (fragment || location.hash.startsWith("#d="))) {
+      history.replaceState(null, "", location.pathname + location.search + fragment);
+    }
+    document.documentElement.classList.toggle("has-draft", location.hash.startsWith("#d="));
   }
 
   function applyDraft(draft) {
@@ -930,5 +938,13 @@
       event.preventDefault();
       openDemoDraft();
     });
+    if (els.firstTryBtn) {
+      els.firstTryBtn.setAttribute("href", fragment);
+      els.firstTryBtn.addEventListener("click", (event) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        openDemoDraft();
+      });
+    }
   }
 })();

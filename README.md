@@ -18,10 +18,10 @@ PDF unlock is optional. The $1 button uses a Stripe **TEST** Payment Link — no
 
 Free live invoice preview in the browser — no signup.
 
-**Open demo draft** opens this pre-filled freelance invoice through the share link (`#d=`). **Fill sample invoice** loads the same example into the form, with dates set to today. Edits after either one still update the preview. On a phone, those buttons stay on screen, and a live total stays with the form while you edit. The header **EN | 中文** control switches the page chrome. Text you type into the invoice stays as entered, and the choice is saved in this browser.
+**Open demo draft** opens this pre-filled freelance invoice through the share link (`#d=`). On a first visit, with no draft in the link, that same button is the large control under the header. **Fill sample invoice** loads the same example into the form, with dates set to today. Edits after either one still update the preview. On a phone, those buttons stay on screen, and a live total stays with the form while you edit. The header **EN | 中文** control switches the page chrome. Text you type into the invoice stays as entered, and the choice is saved in this browser.
 
 Feedback: [Issue #2](https://github.com/SummerLv/Tinystep/issues/2)
 
 The page keeps **Copy link** and a **Leave feedback** button to that issue. **Copy link** copies the bare site URL while the form is still the default. After you open the demo draft, fill the sample, or edit the invoice, **Copy link** and **Share on X** include that draft in the link (`#d=`) so a friend opening it sees the same invoice and can edit it. Nothing is uploaded. After you edit From, Bill to, or a line item, a one-time note (saved in this browser) asks for a one-line comment. Dismiss it with Not now. No signup.
 
-免费浏览器发票预览，无需注册。**打开演示草稿** 会通过分享链接打开同一张示例发票。页头 **EN | 中文** 只改界面文字，不改你填的发票内容，选择会记在这个浏览器里。
+免费浏览器发票预览，无需注册。**打开演示草稿** 会通过分享链接打开同一张示例发票。第一次打开、链接里没有草稿时，页头下方的大按钮也是打开演示草稿。页头 **EN | 中文** 只改界面文字，不改你填的发票内容，选择会记在这个浏览器里。
