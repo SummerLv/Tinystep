@@ -57,9 +57,12 @@
     <section class="first-try" aria-labelledby="firstTryTitle">
       <p class="first-try-copy">
         <strong id="firstTryTitle" data-i18n="firstTryTitle">See a finished invoice</strong>
-        <span data-i18n="firstTryBody">One tap opens the demo draft and the live preview. No signup.</span>
+        <span data-i18n="firstTryBody">One tap opens the demo draft. Then Print / Save as PDF — free, no signup.</span>
       </p>
-      <a class="btn primary first-try-cta" id="firstTryBtn" href="#d=" data-i18n="firstTryCta">Open demo draft</a>
+      <div class="first-try-actions">
+        <a class="btn primary first-try-cta" id="firstTryBtn" href="#d=" data-i18n="firstTryCta">Open demo draft</a>
+        <button type="button" class="btn print-free" id="printFirstBtn" data-i18n="printBtn">Print / Save as PDF (free)</button>
+      </div>
     </section>
   </div>
 
@@ -70,16 +73,17 @@
         <div class="try-bar" id="tryBar">
           <button type="button" class="btn sample" id="fillSampleBtn" data-i18n="fillSample">Fill sample invoice</button>
           <a class="btn demo" id="openDemoBtn" href="#d=" data-i18n="openDemo">Open demo draft</a>
+          <button type="button" class="btn print-free" id="printFreeBtn" data-i18n="printBtn">Print / Save as PDF (free)</button>
           <a class="btn see-preview" href="#livePreview" data-i18n="seePreview">See preview</a>
         </div>
       </div>
-      <p class="lede" data-i18n-html="lede">Fill the form → <strong>live preview is free</strong> (no signup). Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge. Feedback welcome — tell us what feels broken.</p>
+      <p class="lede" data-i18n-html="lede">Open demo draft → <strong>Print / Save as PDF (free)</strong> — no signup and no payment. Optional $1 PDF unlock uses a <strong>Stripe TEST</strong> checkout, not a real charge.</p>
       <a class="preview-peek" id="previewPeek" href="#livePreview">
         <span class="peek-kicker" data-i18n="peekKicker">Live preview · tap to open</span>
         <span class="peek-parties" id="peekParties">Alex Rivera → Northwind Labs</span>
         <span class="peek-total" id="peekTotal">Total $1,500.00</span>
       </a>
-      <p class="cta-banner" id="ctaBanner" data-i18n-html="ctaBanner">Fill sample invoice, or edit From, Bill to, or a line item — the live preview is free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. PDF unlock is optional (Stripe test).</p>
+      <p class="cta-banner" id="ctaBanner" data-i18n-html="ctaBanner">Open demo draft, then print or save as PDF for free. <a id="bannerFeedbackLink" href="https://github.com/SummerLv/Tinystep/issues/2" target="_blank" rel="noopener noreferrer">Leave a one-line comment on Issue #2</a>. The $1 PDF unlock is optional (Stripe test).</p>
 
       <div class="grid2">
         <label class="touch-edit" id="fromField"><span data-i18n="fromYou">From (you)</span>
@@ -124,17 +128,18 @@
       </label>
 
       <div class="actions">
-        <button type="button" class="btn" id="payBtn" data-i18n="payBtn">Unlock PDF — $1 test</button>
+        <button type="button" class="btn print-free" id="printBtn" data-i18n="printBtn">Print / Save as PDF (free)</button>
+        <button type="button" class="btn ghost" id="payBtn" data-i18n="payBtn">Optional PDF unlock — $1 TEST</button>
         <button type="button" class="btn" id="downloadBtn" data-i18n="downloadBtn" disabled>Download PDF</button>
-        <button type="button" class="btn ghost" id="printBtn" data-i18n="printBtn">Print preview</button>
       </div>
-      <p class="hint" id="payHint">Preview stays free. The $1 button opens a Stripe TEST checkout — not a real charge. Feedback welcome.</p>
+      <p class="hint" id="payHint">Print / Save as PDF is free — no signup. The $1 button is an optional Stripe TEST checkout, not a real charge.</p>
     </section>
 
     <section class="panel preview-panel" id="livePreview">
       <div class="preview-toolbar">
         <strong data-i18n="livePreview">Live preview</strong>
         <span class="muted" id="totalLabel">Total $0.00</span>
+        <button type="button" class="btn print-free" id="printPreviewBtn" data-i18n="printBtn">Print / Save as PDF (free)</button>
       </div>
       <div id="invoice" class="invoice">
         <!-- rendered by app.js -->
@@ -144,14 +149,14 @@
   </main>
 
   <footer class="foot">
-    <span data-i18n="footer">TinyInvoice · free preview · optional $1 test PDF · no account</span>
+    <span data-i18n="footer">TinyInvoice · free print / save PDF · optional $1 TEST · no account</span>
     <a href="#privacy" id="privacyLink" data-i18n="privacy">Privacy</a>
   </footer>
 
   <dialog id="payModal">
     <form method="dialog" class="modal">
       <h3 data-i18n="modalTitle">Optional PDF unlock ($1 test)</h3>
-      <p data-i18n-html="modalBody">This opens a <strong>Stripe TEST</strong> checkout. It is not a live charge and does not require an account. The free preview stays available either way.</p>
+      <p data-i18n-html="modalBody">This opens a <strong>Stripe TEST</strong> checkout. It is not a live charge and does not require an account. You can print or save a PDF for free without this step.</p>
       <div class="modal-actions">
         <button class="btn ghost" value="cancel" data-i18n="cancel">Cancel</button>
         <button class="btn primary" id="confirmPay" value="default" data-i18n="continuePay">Continue to test checkout</button>
