@@ -76,20 +76,55 @@ body {
 }
 .badge.unlocked { color: var(--accent2); background: #123022; border-color: #23563d; }
 .btn.copy-link,
-.btn.share-x {
+.btn.share-x,
+.btn.qr-btn,
+.btn.copy-wechat {
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .02em;
   border-radius: 999px;
   line-height: 1.2;
+  white-space: nowrap;
 }
-.btn.share-x:hover { filter: brightness(1.08); }
-.btn.copy-link.copied {
+.btn.share-x:hover,
+.btn.qr-btn:hover,
+.btn.copy-wechat:hover { filter: brightness(1.08); }
+.btn.copy-wechat {
+  white-space: normal;
+  text-align: center;
+  max-width: 100%;
+}
+.btn.copy-link.copied,
+.btn.copy-wechat.copied {
   color: var(--accent2);
   background: #123022;
   border-color: #23563d;
 }
+.qr-modal h3 { margin: 0 0 12px; }
+.qr-code {
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+}
+.qr-code svg {
+  width: min(72vw, 280px);
+  height: auto;
+  display: block;
+}
+.qr-caption {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  max-height: 4.8em;
+  overflow: auto;
+}
+.qr-modal .hint { margin: 8px 0 0; }
+#qrDialog { width: min(420px, calc(100vw - 24px)); }
 .short-share {
   position: relative;
   display: inline-flex;

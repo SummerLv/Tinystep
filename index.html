@@ -65,6 +65,8 @@
         <span class="short-kicker" data-i18n="shortLinkLabel">Short link</span>
         <span class="short-url">is.gd/9uVOG5</span>
       </a>
+      <button type="button" class="btn qr-btn" id="qrBtn" data-i18n="showQr" data-i18n-aria="qrAria" aria-haspopup="dialog" aria-controls="qrDialog" aria-label="Show QR code">QR code</button>
+      <button type="button" class="btn copy-wechat" id="copyWechatBtn" data-i18n="copyWechat">Copy WeChat-friendly text</button>
       <div class="lang-toggle" role="group" data-i18n-aria="langGroup" aria-label="Language">
         <button type="button" id="langEn" data-set-lang="en" aria-pressed="true">EN</button>
         <span class="lang-sep" aria-hidden="true">|</span>
@@ -174,6 +176,18 @@
     <a href="#privacy" id="privacyLink" data-i18n="privacy">Privacy</a>
   </footer>
 
+  <dialog id="qrDialog" aria-labelledby="qrTitle">
+    <form method="dialog" class="modal qr-modal">
+      <h3 id="qrTitle" data-i18n="qrTitle">Scan to open</h3>
+      <div id="qrCode" class="qr-code"></div>
+      <p id="qrCaption" class="qr-caption"></p>
+      <p id="qrHint" class="hint" data-i18n="qrHint">WeChat: tap + then Scan. Then Open demo draft → Print / Save as PDF (free).</p>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel" data-i18n="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="payModal">
     <form method="dialog" class="modal">
       <h3 data-i18n="modalTitle">Optional PDF unlock ($1 test)</h3>
@@ -198,6 +212,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="config.js"></script>
+  <script src="qr.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
