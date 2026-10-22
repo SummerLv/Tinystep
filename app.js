@@ -52,6 +52,17 @@
       copyFailed: "Copy failed",
       shortLinkLabel: "Short link",
       shortLinkAria: "Short link. Copies https://is.gd/9uVOG5",
+      showQr: "QR code",
+      qrAria: "Show QR code",
+      qrTitle: "Scan to open",
+      qrHint: "WeChat: tap + then Scan. Then Open demo draft → Print / Save as PDF (free).",
+      qrHintDraft: "WeChat: tap + then Scan. This code opens the invoice on screen. Print / Save as PDF is free.",
+      qrImgAlt: "QR code for TinyInvoice",
+      qrTooLong: "This draft is too long for a QR code. The short link is shown instead.",
+      copyWechat: "Copy WeChat-friendly text",
+      wechatInvite: "TinyInvoice — free invoice preview in the browser. No signup.",
+      wechatPath: "Open demo draft → Print / Save as PDF (free).",
+      close: "Close",
       locked: "Locked",
       unlocked: "Unlocked",
       h1: "Try a free invoice preview in 60 seconds",
@@ -130,6 +141,17 @@
       copyFailed: "复制失败",
       shortLinkLabel: "短链接",
       shortLinkAria: "短链接。点击复制 https://is.gd/9uVOG5",
+      showQr: "二维码",
+      qrAria: "显示二维码",
+      qrTitle: "扫码打开",
+      qrHint: "微信：点 + 再扫一扫。然后打开演示草稿 → 浏览器打印 · 免费导出 PDF。",
+      qrHintDraft: "微信：点 + 再扫一扫。这个码打开当前发票。浏览器打印导出 PDF 是免费的。",
+      qrImgAlt: "TinyInvoice 二维码",
+      qrTooLong: "这份草稿太长，放不进二维码。下面显示短链接。",
+      copyWechat: "复制微信分享文案",
+      wechatInvite: "TinyInvoice — 浏览器免费发票预览，无需注册。",
+      wechatPath: "打开演示草稿 → 浏览器打印 · 免费导出 PDF。",
+      close: "关闭",
       locked: "未解锁",
       unlocked: "已解锁",
       h1: "60 秒免费试用发票预览",
@@ -232,6 +254,12 @@
       if (shortLink.classList.contains("copied")) shortKicker.textContent = t("copied");
       else if (shortLink.dataset.failed === "1") shortKicker.textContent = t("copyFailed");
       else shortKicker.textContent = t("shortLinkLabel");
+    }
+    const wechatBtn = document.getElementById("copyWechatBtn");
+    if (wechatBtn) {
+      if (wechatBtn.classList.contains("copied")) wechatBtn.textContent = t("copied");
+      else if (wechatBtn.dataset.failed === "1") wechatBtn.textContent = t("copyFailed");
+      else wechatBtn.textContent = t("copyWechat");
     }
     if (els.fillSampleBtn) {
       els.fillSampleBtn.textContent = els.fillSampleBtn.classList.contains("filled")
@@ -858,6 +886,45 @@
   els.dismissNudge.addEventListener("click", dismissFeedbackNudge);
   let copyResetTimer = 0;
   let shortCopyResetTimer = 0;
+  let wechatCopyResetTimer = 0;
+
+  function handoffUrl() {
+    // A draft needs the canonical URL so #d= survives. The bare entry uses the short link.
+    return draftFragment() ? currentShareUrl() : SHORT_SHARE_URL;
+  }
+
+  function wechatShareText() {
+    return [t("wechatInvite"), t("wechatPath"), SHORT_SHARE_URL].join("\n");
+  }
+
+  function renderQr() {
+    const host = document.getElementById("qrCode");
+    const caption = document.getElementById("qrCaption");
+    const hint = document.getElementById("qrHint");
+    if (!host || !window.TinyQR) return;
+    let url = handoffUrl();
+    let fallback = "";
+    try {
+      host.innerHTML = window.TinyQR.svg(url, { label: t("qrImgAlt") });
+    } catch (err) {
+      url = SHORT_SHARE_URL;
+      fallback = t("qrTooLong");
+      host.innerHTML = window.TinyQR.svg(url, { label: t("qrImgAlt") });
+    }
+    if (caption) caption.textContent = fallback ? fallback + " " + url : url;
+    if (hint) {
+      const key = !fallback && draftFragment() ? "qrHintDraft" : "qrHint";
+      hint.setAttribute("data-i18n", key);
+      hint.textContent = t(key);
+    }
+  }
+
+  function openQr() {
+    const dialog = document.getElementById("qrDialog");
+    if (!dialog || !dialog.showModal) return;
+    renderQr();
+    if (!dialog.open) dialog.showModal();
+  }
 
   async function writeClipboard(text) {
     if (navigator.clipboard && window.isSecureContext) {
@@ -919,9 +986,44 @@
     }, 1600);
   }
 
+  async function copyWechatText() {
+    const btn = document.getElementById("copyWechatBtn");
+    if (!btn) return;
+    try {
+      await writeClipboard(wechatShareText());
+      delete btn.dataset.failed;
+      btn.textContent = t("copied");
+      btn.classList.add("copied");
+    } catch {
+      btn.dataset.failed = "1";
+      btn.textContent = t("copyFailed");
+      btn.classList.remove("copied");
+    }
+    clearTimeout(wechatCopyResetTimer);
+    wechatCopyResetTimer = setTimeout(() => {
+      delete btn.dataset.failed;
+      btn.textContent = t("copyWechat");
+      btn.classList.remove("copied");
+    }, 1600);
+  }
+
   els.copyLinkBtn.addEventListener("click", () => {
     copyShareLink();
   });
+  const qrBtn = document.getElementById("qrBtn");
+  if (qrBtn) qrBtn.addEventListener("click", openQr);
+  const copyWechatBtn = document.getElementById("copyWechatBtn");
+  if (copyWechatBtn) copyWechatBtn.addEventListener("click", () => copyWechatText());
+  const qrDialog = document.getElementById("qrDialog");
+  if (qrDialog) {
+    qrDialog.addEventListener("click", (event) => {
+      if (event.target === qrDialog) qrDialog.close();
+    });
+    qrDialog.addEventListener("close", () => {
+      const host = document.getElementById("qrCode");
+      if (host) host.replaceChildren();
+    });
+  }
   const shortShareLink = document.getElementById("shortShareLink");
   if (shortShareLink) {
     shortShareLink.addEventListener("click", (event) => {
